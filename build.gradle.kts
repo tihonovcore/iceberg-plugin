@@ -7,6 +7,14 @@ plugins {
 group = "com.tihonovcore"
 version = "1.0-SNAPSHOT"
 
+sourceSets {
+    main {
+        java {
+            srcDirs("src/main/gen")
+        }
+    }
+}
+
 repositories {
     mavenCentral()
 }

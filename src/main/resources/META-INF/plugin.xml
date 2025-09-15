@@ -25,6 +25,17 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
+        <fileType
+            name="Iceberg File"
+            implementationClass="iceberg.IcebergFileType"
+            fieldName="INSTANCE"
+            language="Iceberg"
+            extensions="ib"/>
+        <lang.parserDefinition
+            language="Iceberg"
+            implementationClass="iceberg.IcebergParserDefinition"/>
+        <lang.syntaxHighlighterFactory
+            language="Iceberg"
+            implementationClass="iceberg.IcebergSyntaxHighlighterFactory"/>
     </extensions>
 </idea-plugin>
