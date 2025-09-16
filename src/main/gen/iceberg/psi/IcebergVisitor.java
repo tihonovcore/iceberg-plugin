@@ -7,6 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public class IcebergVisitor extends PsiElementVisitor {
 
+  public void visitAdditiveExpression(@NotNull IcebergAdditiveExpression o) {
+    visitPsiElement(o);
+  }
+
   public void visitAtom(@NotNull IcebergAtom o) {
     visitPsiElement(o);
   }
@@ -27,10 +31,6 @@ public class IcebergVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitFactor(@NotNull IcebergFactor o) {
-    visitPsiElement(o);
-  }
-
   public void visitIfStatement(@NotNull IcebergIfStatement o) {
     visitPsiElement(o);
   }
@@ -43,7 +43,19 @@ public class IcebergVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMemberAccessExpression(@NotNull IcebergMemberAccessExpression o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMultiplicativeExpression(@NotNull IcebergMultiplicativeExpression o) {
+    visitPsiElement(o);
+  }
+
   public void visitPrintStatement(@NotNull IcebergPrintStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRelationalExpression(@NotNull IcebergRelationalExpression o) {
     visitPsiElement(o);
   }
 
@@ -51,7 +63,7 @@ public class IcebergVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitTerm(@NotNull IcebergTerm o) {
+  public void visitUnaryExpression(@NotNull IcebergUnaryExpression o) {
     visitPsiElement(o);
   }
 

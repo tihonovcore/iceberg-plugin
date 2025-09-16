@@ -110,16 +110,20 @@ whileStatement
 //  | THIS
 //  ;
 
-expression           ::= logicalOrExpression  (ASSIGN logicalOrExpression)?
-logicalOrExpression  ::= logicalAndExpression (OR logicalAndExpression)*
-logicalAndExpression ::= equalityExpression   (AND equalityExpression)*
-equalityExpression   ::= term                 ((PLUS | MINUS) term)*
-term                 ::= factor               ((STAR | SLASH) factor)*
-factor               ::= atom
-
-//  | left=expression (PLUS | MINUS)      right=expression  #additionExpression
-//  | left=expression (LE | GE | LT | GT) right=expression  #relationalExpression
-//  | left=expression (EQ | NEQ)          right=expression  #equalityExression
-
+expression               ::= logicalOrExpression      (ASSIGN logicalOrExpression)?
+logicalOrExpression      ::= logicalAndExpression     (OR logicalAndExpression)*
+logicalAndExpression     ::= equalityExpression       (AND equalityExpression)*
+equalityExpression       ::= relationalExpression     ((EQ | NEQ) relationalExpression)*
+relationalExpression     ::= additiveExpression       ((LT | LE | GT | GE) additiveExpression)*
+additiveExpression       ::= multiplicativeExpression ((PLUS | MINUS) multiplicativeExpression)*
+multiplicativeExpression ::= memberAccessExpression   ((STAR | SLASH) memberAccessExpression)*
+memberAccessExpression   ::= unaryExpression //(DOT (ID | functionCall))*
+//unaryExpression
+//  ::= (NEW ID)
+//    | (NOT unaryExpression)
+//    | (MINUS unaryExpression)
+//    | atom
+//    ;
+unaryExpression          ::= atom
 
 atom ::= NUMBER|FALSE|TRUE|NULL|COMMENT|ID

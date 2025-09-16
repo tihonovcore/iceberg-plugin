@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface IcebergFactor extends PsiElement {
+public interface IcebergAdditiveExpression extends PsiElement {
 
   @NotNull
-  IcebergAtom getAtom();
+  List<IcebergMultiplicativeExpression> getMultiplicativeExpressionList();
 
 }

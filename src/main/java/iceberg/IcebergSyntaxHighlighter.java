@@ -23,6 +23,8 @@ public class IcebergSyntaxHighlighter extends SyntaxHighlighterBase {
         createTextAttributesKey("ICEBERG_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
     public static final TextAttributesKey ICEBERG_OPERATOR =
         createTextAttributesKey("ICEBERG_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    public static final TextAttributesKey ICEBERG_IDENTIFIER =
+        createTextAttributesKey("ICEBERG_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
 
     public static final TextAttributesKey SEPARATOR =
         createTextAttributesKey("ICEBERG_SEPARATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
@@ -50,6 +52,7 @@ public class IcebergSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{ICEBERG_KEYWORD};
     private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{ICEBERG_NUMBER};
     private static final TextAttributesKey[] OPERATOR_KEYS = new TextAttributesKey[]{ICEBERG_OPERATOR};
+    private static final TextAttributesKey[] IDENTIFIER_KEYS = new TextAttributesKey[]{ICEBERG_IDENTIFIER};
 
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
     private static final TextAttributesKey[] SEPARATOR_KEYS = new TextAttributesKey[]{SEPARATOR};
@@ -74,6 +77,9 @@ public class IcebergSyntaxHighlighter extends SyntaxHighlighterBase {
         }
         if (IcebergTypes.NUMBER.equals(tokenType)) {
             return NUMBER_KEYS;
+        }
+        if (IcebergTypes.ID.equals(tokenType)) {
+            return IDENTIFIER_KEYS;
         }
 
         if (tokenType.equals(IcebergTypes.ATOM)) {

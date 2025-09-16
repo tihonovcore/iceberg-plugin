@@ -24,15 +24,15 @@ SLASH = "/"
 //CLOSE_PARENTHESIS : ')';
 //OPEN_BRACE        : '{';
 //CLOSE_BRACE       : '}';
-//
-//EQ : '==';
-//NEQ : '!=';
-//
-//LE : '<=';
-//GE : '>=';
-//LT : '<';
-//GT : '>';
-//
+
+EQ  = "=="
+NEQ = "!="
+
+LE = <=
+GE = >=
+LT = <
+GT = >
+
 //NOT : 'not';
 AND = and
 OR  = or
@@ -83,6 +83,14 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {MINUS}                           { return IcebergTypes.MINUS; }
 <YYINITIAL> {STAR}                            { return IcebergTypes.STAR; }
 <YYINITIAL> {SLASH}                           { return IcebergTypes.SLASH; }
+
+<YYINITIAL> {EQ}                              { return IcebergTypes.EQ; }
+<YYINITIAL> {NEQ}                             { return IcebergTypes.NEQ; }
+
+<YYINITIAL> {LE}                              { return IcebergTypes.LE; }
+<YYINITIAL> {GE}                              { return IcebergTypes.GE; }
+<YYINITIAL> {LT}                              { return IcebergTypes.LT; }
+<YYINITIAL> {GT}                              { return IcebergTypes.GT; }
 
 <YYINITIAL> {AND}                             { return IcebergTypes.AND; }
 <YYINITIAL> {OR}                              { return IcebergTypes.OR; }

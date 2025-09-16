@@ -20,7 +20,15 @@ public interface IcebergTokenSets {
         IcebergTypes.PLUS,
         IcebergTypes.MINUS,
         IcebergTypes.STAR,
-        IcebergTypes.SLASH
+        IcebergTypes.SLASH,
+        IcebergTypes.EQ,
+        IcebergTypes.NEQ,
+        IcebergTypes.LE,
+        IcebergTypes.GE,
+        IcebergTypes.LT,
+        IcebergTypes.GT,
+        IcebergTypes.AND,
+        IcebergTypes.OR
     );
 
     TokenSet COMMENTS = TokenSet.create(IcebergTypes.COMMENT);
