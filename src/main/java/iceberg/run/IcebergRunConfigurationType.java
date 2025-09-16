@@ -5,6 +5,7 @@ import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.project.Project;
 import iceberg.IcebergIcons;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -15,6 +16,11 @@ public class IcebergRunConfigurationType implements ConfigurationType {
 
     public IcebergRunConfigurationType() {
         factory = new ConfigurationFactory(this) {
+            @Override
+            public @NotNull @NonNls String getId() {
+                return "IcebergRunConfiguration";
+            }
+
             @Override
             public @NotNull RunConfiguration createTemplateConfiguration(@NotNull Project project) {
                 return new IcebergRunConfiguration(project, this, "Iceberg Run");

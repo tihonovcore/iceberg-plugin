@@ -10,7 +10,6 @@ import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
-//TODO: нужна кнопка run в файле
 public class IcebergRunConfiguration extends RunConfigurationBase {
 
     protected IcebergRunConfiguration(Project project, ConfigurationFactory factory, String name) {
