@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface IcebergMemberAccessExpression extends PsiElement {
 
   @NotNull
+  List<IcebergFunctionCall> getFunctionCallList();
+
+  @NotNull
   IcebergUnaryExpression getUnaryExpression();
 
 }

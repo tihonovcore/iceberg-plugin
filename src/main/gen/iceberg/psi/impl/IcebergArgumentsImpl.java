@@ -11,14 +11,14 @@ import static iceberg.psi.IcebergTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import iceberg.psi.*;
 
-public class IcebergAtomImpl extends ASTWrapperPsiElement implements IcebergAtom {
+public class IcebergArgumentsImpl extends ASTWrapperPsiElement implements IcebergArguments {
 
-  public IcebergAtomImpl(@NotNull ASTNode node) {
+  public IcebergArgumentsImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull IcebergVisitor visitor) {
-    visitor.visitAtom(this);
+    visitor.visitArguments(this);
   }
 
   @Override
@@ -28,15 +28,9 @@ public class IcebergAtomImpl extends ASTWrapperPsiElement implements IcebergAtom
   }
 
   @Override
-  @Nullable
-  public IcebergExpression getExpression() {
-    return findChildByClass(IcebergExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public IcebergFunctionCall getFunctionCall() {
-    return findChildByClass(IcebergFunctionCall.class);
+  @NotNull
+  public List<IcebergExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, IcebergExpression.class);
   }
 
 }

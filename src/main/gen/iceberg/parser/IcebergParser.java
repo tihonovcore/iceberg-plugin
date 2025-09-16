@@ -79,19 +79,107 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NUMBER|FALSE|TRUE|NULL|COMMENT|ID
+  // ((expression COMMA)* expression)?
+  public static boolean arguments(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arguments")) return false;
+    Marker m = enter_section_(b, l, _NONE_, ARGUMENTS, "<arguments>");
+    arguments_0(b, l + 1);
+    exit_section_(b, l, m, true, false, null);
+    return true;
+  }
+
+  // (expression COMMA)* expression
+  private static boolean arguments_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arguments_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = arguments_0_0(b, l + 1);
+    r = r && expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (expression COMMA)*
+  private static boolean arguments_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arguments_0_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!arguments_0_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "arguments_0_0", c)) break;
+    }
+    return true;
+  }
+
+  // expression COMMA
+  private static boolean arguments_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arguments_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = expression(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+  //     | functionCall
+  //     | NUMBER
+  //     | FALSE
+  //     | TRUE
+  //     //  | STRING
+  //     | NULL
+  //     | ID
   public static boolean atom(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "atom")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ATOM, "<atom>");
-    r = consumeToken(b, NUMBER);
+    r = atom_0(b, l + 1);
+    if (!r) r = functionCall(b, l + 1);
+    if (!r) r = consumeToken(b, NUMBER);
     if (!r) r = consumeToken(b, FALSE);
     if (!r) r = consumeToken(b, TRUE);
     if (!r) r = consumeToken(b, NULL);
-    if (!r) r = consumeToken(b, COMMENT);
     if (!r) r = consumeToken(b, ID);
     exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  // OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+  private static boolean atom_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "atom_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OPEN_PARENTHESIS);
+    r = r && expression(b, l + 1);
+    r = r && consumeToken(b, CLOSE_PARENTHESIS);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // OPEN_BRACE statement* CLOSE_BRACE
+  public static boolean block(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block")) return false;
+    if (!nextTokenIs(b, OPEN_BRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OPEN_BRACE);
+    r = r && block_1(b, l + 1);
+    r = r && consumeToken(b, CLOSE_BRACE);
+    exit_section_(b, m, BLOCK, r);
+    return r;
+  }
+
+  // statement*
+  private static boolean block_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!statement(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "block_1", c)) break;
+    }
+    return true;
   }
 
   /* ********************************************************** */
@@ -305,6 +393,53 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ID OPEN_PARENTHESIS arguments CLOSE_PARENTHESIS
+  public static boolean functionCall(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "functionCall")) return false;
+    if (!nextTokenIs(b, ID)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, ID, OPEN_PARENTHESIS);
+    r = r && arguments(b, l + 1);
+    r = r && consumeToken(b, CLOSE_PARENTHESIS);
+    exit_section_(b, m, FUNCTION_CALL, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // FUN ID OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS (COLON ID)? block
+  public static boolean functionDefinitionStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "functionDefinitionStatement")) return false;
+    if (!nextTokenIs(b, FUN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, FUN, ID, OPEN_PARENTHESIS);
+    r = r && parameters(b, l + 1);
+    r = r && consumeToken(b, CLOSE_PARENTHESIS);
+    r = r && functionDefinitionStatement_5(b, l + 1);
+    r = r && block(b, l + 1);
+    exit_section_(b, m, FUNCTION_DEFINITION_STATEMENT, r);
+    return r;
+  }
+
+  // (COLON ID)?
+  private static boolean functionDefinitionStatement_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "functionDefinitionStatement_5")) return false;
+    functionDefinitionStatement_5_0(b, l + 1);
+    return true;
+  }
+
+  // COLON ID
+  private static boolean functionDefinitionStatement_5_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "functionDefinitionStatement_5_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, COLON, ID);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // IF expression
   //       THEN statement
   //       (ELSE statement)?
@@ -409,13 +544,45 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // unaryExpression
+  // unaryExpression          (DOT (ID | functionCall))*
   public static boolean memberAccessExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "memberAccessExpression")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, MEMBER_ACCESS_EXPRESSION, "<member access expression>");
     r = unaryExpression(b, l + 1);
+    r = r && memberAccessExpression_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (DOT (ID | functionCall))*
+  private static boolean memberAccessExpression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "memberAccessExpression_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!memberAccessExpression_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "memberAccessExpression_1", c)) break;
+    }
+    return true;
+  }
+
+  // DOT (ID | functionCall)
+  private static boolean memberAccessExpression_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "memberAccessExpression_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DOT);
+    r = r && memberAccessExpression_1_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ID | functionCall
+  private static boolean memberAccessExpression_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "memberAccessExpression_1_0_1")) return false;
+    boolean r;
+    r = consumeToken(b, ID);
+    if (!r) r = functionCall(b, l + 1);
     return r;
   }
 
@@ -459,6 +626,61 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     boolean r;
     r = consumeToken(b, STAR);
     if (!r) r = consumeToken(b, SLASH);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ID COLON ID
+  public static boolean parameter(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parameter")) return false;
+    if (!nextTokenIs(b, ID)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, ID, COLON, ID);
+    exit_section_(b, m, PARAMETER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ((parameter COMMA)* parameter)?
+  public static boolean parameters(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parameters")) return false;
+    Marker m = enter_section_(b, l, _NONE_, PARAMETERS, "<parameters>");
+    parameters_0(b, l + 1);
+    exit_section_(b, l, m, true, false, null);
+    return true;
+  }
+
+  // (parameter COMMA)* parameter
+  private static boolean parameters_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parameters_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = parameters_0_0(b, l + 1);
+    r = r && parameter(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (parameter COMMA)*
+  private static boolean parameters_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parameters_0_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!parameters_0_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "parameters_0_0", c)) break;
+    }
+    return true;
+  }
+
+  // parameter COMMA
+  private static boolean parameters_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parameters_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = parameter(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -521,11 +743,35 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // expression     SEMICOLON
-  //     | printStatement SEMICOLON
-  //     | defStatement   SEMICOLON
+  // RETURN expression?
+  public static boolean returnStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "returnStatement")) return false;
+    if (!nextTokenIs(b, RETURN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, RETURN);
+    r = r && returnStatement_1(b, l + 1);
+    exit_section_(b, m, RETURN_STATEMENT, r);
+    return r;
+  }
+
+  // expression?
+  private static boolean returnStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "returnStatement_1")) return false;
+    expression(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // expression      SEMICOLON
+  //     | printStatement  SEMICOLON
+  //     | defStatement    SEMICOLON
+  //     | returnStatement SEMICOLON
   //     | ifStatement
   //     | whileStatement
+  //     | functionDefinitionStatement
+  // //    | classDefinitionStatement
+  //     | block
   //     | COMMENT
   public static boolean statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement")) return false;
@@ -534,14 +780,17 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     r = statement_0(b, l + 1);
     if (!r) r = statement_1(b, l + 1);
     if (!r) r = statement_2(b, l + 1);
+    if (!r) r = statement_3(b, l + 1);
     if (!r) r = ifStatement(b, l + 1);
     if (!r) r = whileStatement(b, l + 1);
+    if (!r) r = functionDefinitionStatement(b, l + 1);
+    if (!r) r = block(b, l + 1);
     if (!r) r = consumeToken(b, COMMENT);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // expression     SEMICOLON
+  // expression      SEMICOLON
   private static boolean statement_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement_0")) return false;
     boolean r;
@@ -552,7 +801,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // printStatement SEMICOLON
+  // printStatement  SEMICOLON
   private static boolean statement_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement_1")) return false;
     boolean r;
@@ -563,12 +812,23 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // defStatement   SEMICOLON
+  // defStatement    SEMICOLON
   private static boolean statement_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = defStatement(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // returnStatement SEMICOLON
+  private static boolean statement_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "statement_3")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = returnStatement(b, l + 1);
     r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, m, null, r);
     return r;

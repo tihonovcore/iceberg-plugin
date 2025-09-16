@@ -9,31 +9,42 @@ import iceberg.psi.impl.*;
 public interface IcebergTypes {
 
   IElementType ADDITIVE_EXPRESSION = new IcebergElementType("ADDITIVE_EXPRESSION");
+  IElementType ARGUMENTS = new IcebergElementType("ARGUMENTS");
   IElementType ATOM = new IcebergElementType("ATOM");
+  IElementType BLOCK = new IcebergElementType("BLOCK");
   IElementType DEF_STATEMENT = new IcebergElementType("DEF_STATEMENT");
   IElementType DEPENDENCY = new IcebergElementType("DEPENDENCY");
   IElementType EQUALITY_EXPRESSION = new IcebergElementType("EQUALITY_EXPRESSION");
   IElementType EXPRESSION = new IcebergElementType("EXPRESSION");
+  IElementType FUNCTION_CALL = new IcebergElementType("FUNCTION_CALL");
+  IElementType FUNCTION_DEFINITION_STATEMENT = new IcebergElementType("FUNCTION_DEFINITION_STATEMENT");
   IElementType IF_STATEMENT = new IcebergElementType("IF_STATEMENT");
   IElementType LOGICAL_AND_EXPRESSION = new IcebergElementType("LOGICAL_AND_EXPRESSION");
   IElementType LOGICAL_OR_EXPRESSION = new IcebergElementType("LOGICAL_OR_EXPRESSION");
   IElementType MEMBER_ACCESS_EXPRESSION = new IcebergElementType("MEMBER_ACCESS_EXPRESSION");
   IElementType MULTIPLICATIVE_EXPRESSION = new IcebergElementType("MULTIPLICATIVE_EXPRESSION");
+  IElementType PARAMETER = new IcebergElementType("PARAMETER");
+  IElementType PARAMETERS = new IcebergElementType("PARAMETERS");
   IElementType PRINT_STATEMENT = new IcebergElementType("PRINT_STATEMENT");
   IElementType RELATIONAL_EXPRESSION = new IcebergElementType("RELATIONAL_EXPRESSION");
+  IElementType RETURN_STATEMENT = new IcebergElementType("RETURN_STATEMENT");
   IElementType STATEMENT = new IcebergElementType("STATEMENT");
   IElementType UNARY_EXPRESSION = new IcebergElementType("UNARY_EXPRESSION");
   IElementType WHILE_STATEMENT = new IcebergElementType("WHILE_STATEMENT");
 
   IElementType AND = new IcebergTokenType("AND");
   IElementType ASSIGN = new IcebergTokenType("ASSIGN");
+  IElementType CLOSE_BRACE = new IcebergTokenType("CLOSE_BRACE");
+  IElementType CLOSE_PARENTHESIS = new IcebergTokenType("CLOSE_PARENTHESIS");
   IElementType COLON = new IcebergTokenType("COLON");
+  IElementType COMMA = new IcebergTokenType("COMMA");
   IElementType COMMENT = new IcebergTokenType("COMMENT");
   IElementType DEF = new IcebergTokenType("DEF");
   IElementType DOT = new IcebergTokenType("DOT");
   IElementType ELSE = new IcebergTokenType("ELSE");
   IElementType EQ = new IcebergTokenType("EQ");
   IElementType FALSE = new IcebergTokenType("FALSE");
+  IElementType FUN = new IcebergTokenType("FUN");
   IElementType GE = new IcebergTokenType("GE");
   IElementType GT = new IcebergTokenType("GT");
   IElementType ID = new IcebergTokenType("ID");
@@ -45,9 +56,12 @@ public interface IcebergTypes {
   IElementType NEQ = new IcebergTokenType("NEQ");
   IElementType NULL = new IcebergTokenType("NULL");
   IElementType NUMBER = new IcebergTokenType("NUMBER");
+  IElementType OPEN_BRACE = new IcebergTokenType("OPEN_BRACE");
+  IElementType OPEN_PARENTHESIS = new IcebergTokenType("OPEN_PARENTHESIS");
   IElementType OR = new IcebergTokenType("OR");
   IElementType PLUS = new IcebergTokenType("PLUS");
   IElementType PRINT = new IcebergTokenType("PRINT");
+  IElementType RETURN = new IcebergTokenType("RETURN");
   IElementType SEMICOLON = new IcebergTokenType("SEMICOLON");
   IElementType SLASH = new IcebergTokenType("SLASH");
   IElementType STAR = new IcebergTokenType("STAR");
@@ -61,8 +75,14 @@ public interface IcebergTypes {
       if (type == ADDITIVE_EXPRESSION) {
         return new IcebergAdditiveExpressionImpl(node);
       }
+      else if (type == ARGUMENTS) {
+        return new IcebergArgumentsImpl(node);
+      }
       else if (type == ATOM) {
         return new IcebergAtomImpl(node);
+      }
+      else if (type == BLOCK) {
+        return new IcebergBlockImpl(node);
       }
       else if (type == DEF_STATEMENT) {
         return new IcebergDefStatementImpl(node);
@@ -75,6 +95,12 @@ public interface IcebergTypes {
       }
       else if (type == EXPRESSION) {
         return new IcebergExpressionImpl(node);
+      }
+      else if (type == FUNCTION_CALL) {
+        return new IcebergFunctionCallImpl(node);
+      }
+      else if (type == FUNCTION_DEFINITION_STATEMENT) {
+        return new IcebergFunctionDefinitionStatementImpl(node);
       }
       else if (type == IF_STATEMENT) {
         return new IcebergIfStatementImpl(node);
@@ -91,11 +117,20 @@ public interface IcebergTypes {
       else if (type == MULTIPLICATIVE_EXPRESSION) {
         return new IcebergMultiplicativeExpressionImpl(node);
       }
+      else if (type == PARAMETER) {
+        return new IcebergParameterImpl(node);
+      }
+      else if (type == PARAMETERS) {
+        return new IcebergParametersImpl(node);
+      }
       else if (type == PRINT_STATEMENT) {
         return new IcebergPrintStatementImpl(node);
       }
       else if (type == RELATIONAL_EXPRESSION) {
         return new IcebergRelationalExpressionImpl(node);
+      }
+      else if (type == RETURN_STATEMENT) {
+        return new IcebergReturnStatementImpl(node);
       }
       else if (type == STATEMENT) {
         return new IcebergStatementImpl(node);

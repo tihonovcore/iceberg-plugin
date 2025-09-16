@@ -20,10 +20,10 @@ PLUS  = "+"
 MINUS = "-"
 STAR  = "*"
 SLASH = "/"
-//OPEN_PARENTHESIS  : '(';
-//CLOSE_PARENTHESIS : ')';
-//OPEN_BRACE        : '{';
-//CLOSE_BRACE       : '}';
+OPEN_PARENTHESIS  = "("
+CLOSE_PARENTHESIS = ")"
+OPEN_BRACE        = "{"
+CLOSE_BRACE       = "}"
 
 EQ  = "=="
 NEQ = "!="
@@ -42,8 +42,8 @@ WHILE  = while
 IF     = if
 THEN   = then
 ELSE   = else
-//FUN    : 'fun';
-//RETRUN : 'return';
+FUN    = fun
+RETURN = return
 //CLASS  : 'class';
 //NEW    : 'new';
 //THIS   : 'this';
@@ -83,6 +83,10 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {MINUS}                           { return IcebergTypes.MINUS; }
 <YYINITIAL> {STAR}                            { return IcebergTypes.STAR; }
 <YYINITIAL> {SLASH}                           { return IcebergTypes.SLASH; }
+<YYINITIAL> {OPEN_PARENTHESIS}                { return IcebergTypes.OPEN_PARENTHESIS; }
+<YYINITIAL> {CLOSE_PARENTHESIS}               { return IcebergTypes.CLOSE_PARENTHESIS; }
+<YYINITIAL> {OPEN_BRACE}                      { return IcebergTypes.OPEN_BRACE; }
+<YYINITIAL> {CLOSE_BRACE}                     { return IcebergTypes.CLOSE_BRACE; }
 
 <YYINITIAL> {EQ}                              { return IcebergTypes.EQ; }
 <YYINITIAL> {NEQ}                             { return IcebergTypes.NEQ; }
@@ -100,6 +104,8 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {IF}                              { return IcebergTypes.IF; }
 <YYINITIAL> {THEN}                            { return IcebergTypes.THEN; }
 <YYINITIAL> {ELSE}                            { return IcebergTypes.ELSE; }
+<YYINITIAL> {FUN}                             { return IcebergTypes.FUN; }
+<YYINITIAL> {RETURN}                          { return IcebergTypes.RETURN; }
 <YYINITIAL> {IMPORT}                          { return IcebergTypes.IMPORT; }
 
 <YYINITIAL> {NUMBER}                          { return IcebergTypes.NUMBER; }
@@ -114,7 +120,7 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {DOT}                             { return IcebergTypes.DOT; }
 
 <YYINITIAL> {SEMICOLON}                       { return IcebergTypes.SEMICOLON; }
-//<YYINITIAL> {COMMA}                           { return IcebergTypes.COMMA; }
+<YYINITIAL> {COMMA}                           { return IcebergTypes.COMMA; }
 
 <YYINITIAL> {COMMENT}                         { return IcebergTypes.COMMENT; }
 <YYINITIAL> {WS}                              { return TokenType.WHITE_SPACE; }

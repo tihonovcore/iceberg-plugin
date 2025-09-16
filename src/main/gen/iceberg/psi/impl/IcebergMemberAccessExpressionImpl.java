@@ -29,6 +29,12 @@ public class IcebergMemberAccessExpressionImpl extends ASTWrapperPsiElement impl
 
   @Override
   @NotNull
+  public List<IcebergFunctionCall> getFunctionCallList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, IcebergFunctionCall.class);
+  }
+
+  @Override
+  @NotNull
   public IcebergUnaryExpression getUnaryExpression() {
     return findNotNullChildByClass(IcebergUnaryExpression.class);
   }

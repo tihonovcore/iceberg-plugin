@@ -10,6 +10,8 @@ public interface IcebergTokenSets {
         IcebergTypes.IF,
         IcebergTypes.THEN,
         IcebergTypes.ELSE,
+        IcebergTypes.FUN,
+        IcebergTypes.RETURN,
         IcebergTypes.IMPORT, //TODO: cmd+b в джаву
         IcebergTypes.FALSE,
         IcebergTypes.TRUE,

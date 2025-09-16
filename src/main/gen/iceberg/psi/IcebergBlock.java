@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface IcebergAtom extends PsiElement {
+public interface IcebergBlock extends PsiElement {
 
-  @Nullable
-  IcebergExpression getExpression();
-
-  @Nullable
-  IcebergFunctionCall getFunctionCall();
+  @NotNull
+  List<IcebergStatement> getStatementList();
 
 }

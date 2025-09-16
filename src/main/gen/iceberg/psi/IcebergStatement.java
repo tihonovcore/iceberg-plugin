@@ -8,16 +8,25 @@ import com.intellij.psi.PsiElement;
 public interface IcebergStatement extends PsiElement {
 
   @Nullable
+  IcebergBlock getBlock();
+
+  @Nullable
   IcebergDefStatement getDefStatement();
 
   @Nullable
   IcebergExpression getExpression();
 
   @Nullable
+  IcebergFunctionDefinitionStatement getFunctionDefinitionStatement();
+
+  @Nullable
   IcebergIfStatement getIfStatement();
 
   @Nullable
   IcebergPrintStatement getPrintStatement();
+
+  @Nullable
+  IcebergReturnStatement getReturnStatement();
 
   @Nullable
   IcebergWhileStatement getWhileStatement();

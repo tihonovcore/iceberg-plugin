@@ -20,19 +20,16 @@ dependency
   ::= IMPORT ID (DOT ID)* SEMICOLON
 
 statement
-  ::= expression     SEMICOLON
-    | printStatement SEMICOLON
-    | defStatement   SEMICOLON
+  ::= expression      SEMICOLON
+    | printStatement  SEMICOLON
+    | defStatement    SEMICOLON
+    | returnStatement SEMICOLON
     | ifStatement
     | whileStatement
+    | functionDefinitionStatement
+//    | classDefinitionStatement
+    | block
     | COMMENT
-
-//statement
-//  | functionDefinitionStatement
-//  | classDefinitionStatement
-//  | returnStatement SEMICOLON
-//  | block
-//  ;
 
 printStatement
   ::= PRINT expression
@@ -42,6 +39,8 @@ defStatement
   ( COLON ID (ASSIGN expression)?
   | ASSIGN expression
   )
+
+returnStatement ::= RETURN expression?
 
 ifStatement
   ::= IF expression
@@ -58,57 +57,17 @@ whileStatement
 //fieldDefinition
 //  : DEF name=ID COLON type=ID (ASSIGN expression)?
 //  ;
-//
-//functionDefinitionStatement
-//  : FUN name=ID OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS
-//    (COLON returnType=ID)? block
-//  ;
-//
-//parameters
-//  : ((parameter COMMA)* parameter)?
-//  ;
-//
-//parameter : name=ID COLON type=ID;
-//
-//functionCall
-//  : name=ID OPEN_PARENTHESIS arguments CLOSE_PARENTHESIS
-//  ;
-//
-//arguments
-//  : ((expression COMMA)* expression)?
-//  ;
-//
-//returnStatement
-//  : RETRUN expression?
-//  ;
-//
-//block : OPEN_BRACE statement* CLOSE_BRACE;
 
-//expression
-//  : NEW className=ID
-//  | NOT atom
-//  | MINUS atom
-//  | expression DOT  (ID | functionCall)
-//  | left=expression (STAR | SLASH)      right=expression
-//  | left=expression (PLUS | MINUS)      right=expression
-//  | left=expression (LE | GE | LT | GT) right=expression
-//  | left=expression (EQ | NEQ)          right=expression
-//  | left=expression AND                 right=expression
-//  | left=expression OR                  right=expression
-//  | left=expression ASSIGN              right=expression
-//  | atom
-//  ;
+functionDefinitionStatement
+  ::= FUN ID OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS (COLON ID)? block
 
-//atom
-//  : OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
-//  | functionCall
-//  | NUMBER
-//  | FALSE
-//  | TRUE
-//  | STRING
-//  | ID
-//  | THIS
-//  ;
+parameters ::= ((parameter COMMA)* parameter)?
+parameter  ::= ID COLON ID;
+
+functionCall ::= ID OPEN_PARENTHESIS arguments CLOSE_PARENTHESIS
+arguments    ::= ((expression COMMA)* expression)?
+
+block ::= OPEN_BRACE statement* CLOSE_BRACE
 
 expression               ::= logicalOrExpression      (ASSIGN logicalOrExpression)?
 logicalOrExpression      ::= logicalAndExpression     (OR logicalAndExpression)*
@@ -117,7 +76,7 @@ equalityExpression       ::= relationalExpression     ((EQ | NEQ) relationalExpr
 relationalExpression     ::= additiveExpression       ((LT | LE | GT | GE) additiveExpression)*
 additiveExpression       ::= multiplicativeExpression ((PLUS | MINUS) multiplicativeExpression)*
 multiplicativeExpression ::= memberAccessExpression   ((STAR | SLASH) memberAccessExpression)*
-memberAccessExpression   ::= unaryExpression //(DOT (ID | functionCall))*
+memberAccessExpression   ::= unaryExpression          (DOT (ID | functionCall))*
 //unaryExpression
 //  ::= (NEW ID)
 //    | (NOT unaryExpression)
@@ -126,4 +85,13 @@ memberAccessExpression   ::= unaryExpression //(DOT (ID | functionCall))*
 //    ;
 unaryExpression          ::= atom
 
-atom ::= NUMBER|FALSE|TRUE|NULL|COMMENT|ID
+atom
+  ::= OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+    | functionCall
+    | NUMBER
+    | FALSE
+    | TRUE
+    //  | STRING
+    | NULL
+    | ID
+    //  | THIS

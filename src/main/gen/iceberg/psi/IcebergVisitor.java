@@ -11,7 +11,15 @@ public class IcebergVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitArguments(@NotNull IcebergArguments o) {
+    visitPsiElement(o);
+  }
+
   public void visitAtom(@NotNull IcebergAtom o) {
+    visitPsiElement(o);
+  }
+
+  public void visitBlock(@NotNull IcebergBlock o) {
     visitPsiElement(o);
   }
 
@@ -28,6 +36,14 @@ public class IcebergVisitor extends PsiElementVisitor {
   }
 
   public void visitExpression(@NotNull IcebergExpression o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFunctionCall(@NotNull IcebergFunctionCall o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFunctionDefinitionStatement(@NotNull IcebergFunctionDefinitionStatement o) {
     visitPsiElement(o);
   }
 
@@ -51,11 +67,23 @@ public class IcebergVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitParameter(@NotNull IcebergParameter o) {
+    visitPsiElement(o);
+  }
+
+  public void visitParameters(@NotNull IcebergParameters o) {
+    visitPsiElement(o);
+  }
+
   public void visitPrintStatement(@NotNull IcebergPrintStatement o) {
     visitPsiElement(o);
   }
 
   public void visitRelationalExpression(@NotNull IcebergRelationalExpression o) {
+    visitPsiElement(o);
+  }
+
+  public void visitReturnStatement(@NotNull IcebergReturnStatement o) {
     visitPsiElement(o);
   }
 

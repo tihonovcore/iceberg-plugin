@@ -29,6 +29,12 @@ public class IcebergStatementImpl extends ASTWrapperPsiElement implements Iceber
 
   @Override
   @Nullable
+  public IcebergBlock getBlock() {
+    return findChildByClass(IcebergBlock.class);
+  }
+
+  @Override
+  @Nullable
   public IcebergDefStatement getDefStatement() {
     return findChildByClass(IcebergDefStatement.class);
   }
@@ -41,6 +47,12 @@ public class IcebergStatementImpl extends ASTWrapperPsiElement implements Iceber
 
   @Override
   @Nullable
+  public IcebergFunctionDefinitionStatement getFunctionDefinitionStatement() {
+    return findChildByClass(IcebergFunctionDefinitionStatement.class);
+  }
+
+  @Override
+  @Nullable
   public IcebergIfStatement getIfStatement() {
     return findChildByClass(IcebergIfStatement.class);
   }
@@ -49,6 +61,12 @@ public class IcebergStatementImpl extends ASTWrapperPsiElement implements Iceber
   @Nullable
   public IcebergPrintStatement getPrintStatement() {
     return findChildByClass(IcebergPrintStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public IcebergReturnStatement getReturnStatement() {
+    return findChildByClass(IcebergReturnStatement.class);
   }
 
   @Override
