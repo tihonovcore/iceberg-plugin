@@ -20,6 +20,7 @@ class IcebergLexer implements FlexLexer {
 
   /** lexical states */
   public static final int YYINITIAL = 0;
+  public static final int STRING_STATE = 2;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -28,7 +29,7 @@ class IcebergLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-     0, 0
+     0,  0,  1, 1
   };
 
   /**
@@ -37,7 +38,7 @@ class IcebergLexer implements FlexLexer {
   private static final int [] ZZ_CMAP_TOP = zzUnpackcmap_top();
 
   private static final String ZZ_CMAP_TOP_PACKED_0 =
-    "\1\0\u10ff\u0100";
+    "\1\0\37\u0100\1\u0200\267\u0100\10\u0300\u1020\u0100";
 
   private static int [] zzUnpackcmap_top() {
     int [] result = new int[4352];
@@ -65,16 +66,17 @@ class IcebergLexer implements FlexLexer {
   private static final int [] ZZ_CMAP_BLOCKS = zzUnpackcmap_blocks();
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
-    "\11\0\1\1\1\2\2\0\1\2\22\0\1\1\1\3"+
-    "\6\0\1\4\1\5\1\6\1\7\1\10\1\11\1\12"+
-    "\1\13\1\14\11\15\1\16\1\17\1\20\1\21\1\22"+
-    "\2\0\32\23\4\0\1\23\1\0\1\24\1\23\1\25"+
-    "\1\26\1\27\1\30\1\23\1\31\1\32\2\23\1\33"+
-    "\1\34\1\35\1\36\1\37\1\23\1\40\1\41\1\42"+
-    "\1\43\1\23\1\44\3\23\1\45\1\0\1\46\u0182\0";
+    "\11\0\1\1\1\2\2\3\1\2\22\0\1\1\1\4"+
+    "\1\5\5\0\1\6\1\7\1\10\1\11\1\12\1\13"+
+    "\1\14\1\15\1\16\11\17\1\20\1\21\1\22\1\23"+
+    "\1\24\2\0\32\25\1\0\1\26\2\0\1\25\1\0"+
+    "\1\27\1\25\1\30\1\31\1\32\1\33\1\25\1\34"+
+    "\1\35\2\25\1\36\1\37\1\40\1\41\1\42\1\25"+
+    "\1\43\1\44\1\45\1\46\1\25\1\47\3\25\1\50"+
+    "\1\0\1\51\7\0\1\3\u01a2\0\2\3\326\0\u0100\3";
 
   private static int [] zzUnpackcmap_blocks() {
-    int [] result = new int[512];
+    int [] result = new int[1024];
     int offset = 0;
     offset = zzUnpackcmap_blocks(ZZ_CMAP_BLOCKS_PACKED_0, offset, result);
     return result;
@@ -98,16 +100,17 @@ class IcebergLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\1\1\1\2\1\1\1\3\1\4\1\5\1\6"+
-    "\1\7\1\10\1\11\1\12\2\13\1\14\1\15\1\16"+
-    "\1\17\1\20\15\21\1\22\1\23\1\24\1\25\1\26"+
-    "\1\27\1\30\6\21\1\31\4\21\1\32\5\21\1\33"+
-    "\1\21\1\34\2\21\1\35\1\21\1\36\1\37\10\21"+
-    "\1\40\2\21\1\41\2\21\1\42\1\43\1\44\1\21"+
-    "\1\45\1\46\1\21\1\47\1\21\1\50\1\51\1\52";
+    "\2\0\1\1\1\2\1\1\1\3\1\4\1\5\1\6"+
+    "\1\7\1\10\1\11\1\12\1\13\2\14\1\15\1\16"+
+    "\1\17\1\20\1\21\15\22\1\23\1\24\1\25\1\26"+
+    "\1\1\1\27\1\30\1\31\1\32\1\33\6\22\1\34"+
+    "\4\22\1\35\5\22\1\36\1\37\1\40\1\22\1\41"+
+    "\2\22\1\42\1\22\1\43\1\44\10\22\1\45\2\22"+
+    "\1\46\2\22\1\47\1\50\1\51\1\22\1\52\1\53"+
+    "\1\22\1\54\1\22\1\55\1\56\1\57";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[91];
+    int [] result = new int[98];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -132,21 +135,22 @@ class IcebergLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\47\0\116\0\165\0\47\0\47\0\47\0\47"+
-    "\0\47\0\234\0\47\0\303\0\47\0\352\0\47\0\47"+
-    "\0\u0111\0\u0138\0\u015f\0\u0186\0\u01ad\0\u01d4\0\u01fb\0\u0222"+
-    "\0\u0249\0\u0270\0\u0297\0\u02be\0\u02e5\0\u030c\0\u0333\0\u035a"+
-    "\0\47\0\47\0\47\0\u0381\0\47\0\47\0\47\0\u03a8"+
-    "\0\u03cf\0\u03f6\0\u041d\0\u0444\0\u046b\0\u0186\0\u0492\0\u04b9"+
-    "\0\u04e0\0\u0507\0\u0186\0\u052e\0\u0555\0\u057c\0\u05a3\0\u05ca"+
-    "\0\u0186\0\u05f1\0\u0186\0\u0618\0\u063f\0\u0186\0\u0666\0\u0186"+
-    "\0\u0186\0\u068d\0\u06b4\0\u06db\0\u0702\0\u0729\0\u0750\0\u0777"+
-    "\0\u079e\0\u0186\0\u07c5\0\u07ec\0\u0186\0\u0813\0\u083a\0\u0186"+
-    "\0\u0186\0\u0186\0\u0861\0\u0186\0\u0186\0\u0888\0\u0186\0\u08af"+
-    "\0\u0186\0\u0186\0\u0186";
+    "\0\0\0\52\0\124\0\176\0\250\0\124\0\124\0\124"+
+    "\0\124\0\124\0\124\0\322\0\124\0\374\0\124\0\u0126"+
+    "\0\124\0\124\0\u0150\0\u017a\0\u01a4\0\u01ce\0\u01f8\0\u0222"+
+    "\0\u024c\0\u0276\0\u02a0\0\u02ca\0\u02f4\0\u031e\0\u0348\0\u0372"+
+    "\0\u039c\0\u03c6\0\124\0\124\0\124\0\124\0\u03f0\0\124"+
+    "\0\u041a\0\124\0\124\0\124\0\u0444\0\u046e\0\u0498\0\u04c2"+
+    "\0\u04ec\0\u0516\0\u01ce\0\u0540\0\u056a\0\u0594\0\u05be\0\u01ce"+
+    "\0\u05e8\0\u0612\0\u063c\0\u0666\0\u0690\0\124\0\124\0\u01ce"+
+    "\0\u06ba\0\u01ce\0\u06e4\0\u070e\0\u01ce\0\u0738\0\u01ce\0\u01ce"+
+    "\0\u0762\0\u078c\0\u07b6\0\u07e0\0\u080a\0\u0834\0\u085e\0\u0888"+
+    "\0\u01ce\0\u08b2\0\u08dc\0\u01ce\0\u0906\0\u0930\0\u01ce\0\u01ce"+
+    "\0\u01ce\0\u095a\0\u01ce\0\u01ce\0\u0984\0\u01ce\0\u09ae\0\u01ce"+
+    "\0\u01ce\0\u01ce";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[91];
+    int [] result = new int[98];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -169,53 +173,66 @@ class IcebergLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\2\2\3\1\4\1\5\1\6\1\7\1\10\1\11"+
+    "\1\3\2\4\1\3\1\5\1\6\1\7\1\10\1\11"+
     "\1\12\1\13\1\14\1\15\1\16\1\17\1\20\1\21"+
-    "\1\22\1\23\1\24\1\25\1\26\1\27\1\30\1\31"+
-    "\1\24\1\32\2\24\1\33\1\34\1\35\1\36\1\24"+
-    "\1\37\1\24\1\40\1\41\1\42\50\0\2\3\65\0"+
-    "\1\43\42\0\1\16\44\0\1\44\47\0\2\16\52\0"+
-    "\1\45\46\0\1\46\46\0\1\47\41\0\2\24\5\0"+
-    "\22\24\16\0\2\24\5\0\12\24\1\50\7\24\16\0"+
-    "\2\24\5\0\10\24\1\51\11\24\16\0\2\24\5\0"+
-    "\4\24\1\52\15\24\16\0\2\24\5\0\10\24\1\53"+
-    "\11\24\16\0\2\24\5\0\1\24\1\54\16\24\1\55"+
-    "\1\24\16\0\2\24\5\0\5\24\1\56\3\24\1\57"+
-    "\10\24\16\0\2\24\5\0\4\24\1\60\6\24\1\61"+
-    "\4\24\1\62\1\24\16\0\2\24\5\0\15\24\1\63"+
-    "\4\24\16\0\2\24\5\0\15\24\1\64\4\24\16\0"+
-    "\2\24\5\0\4\24\1\65\15\24\16\0\2\24\5\0"+
-    "\6\24\1\66\6\24\1\67\4\24\16\0\2\24\5\0"+
-    "\6\24\1\70\13\24\2\0\2\44\1\0\44\44\14\0"+
-    "\2\24\5\0\3\24\1\71\16\24\16\0\2\24\5\0"+
-    "\1\24\1\72\20\24\16\0\2\24\5\0\5\24\1\73"+
-    "\14\24\16\0\2\24\5\0\16\24\1\74\3\24\16\0"+
-    "\2\24\5\0\10\24\1\75\11\24\16\0\2\24\5\0"+
-    "\12\24\1\76\7\24\16\0\2\24\5\0\14\24\1\77"+
-    "\5\24\16\0\2\24\5\0\21\24\1\100\16\0\2\24"+
-    "\5\0\17\24\1\101\2\24\16\0\2\24\5\0\10\24"+
-    "\1\102\11\24\16\0\2\24\5\0\7\24\1\103\12\24"+
-    "\16\0\2\24\5\0\17\24\1\104\2\24\16\0\2\24"+
-    "\5\0\4\24\1\105\2\24\1\106\12\24\16\0\2\24"+
-    "\5\0\20\24\1\107\1\24\16\0\2\24\5\0\7\24"+
-    "\1\110\12\24\16\0\2\24\5\0\16\24\1\111\3\24"+
-    "\16\0\2\24\5\0\4\24\1\112\15\24\16\0\2\24"+
-    "\5\0\16\24\1\113\3\24\16\0\2\24\5\0\13\24"+
-    "\1\114\6\24\16\0\2\24\5\0\10\24\1\115\11\24"+
-    "\16\0\2\24\5\0\12\24\1\116\7\24\16\0\2\24"+
-    "\5\0\20\24\1\117\1\24\16\0\2\24\5\0\12\24"+
-    "\1\120\7\24\16\0\2\24\5\0\16\24\1\121\3\24"+
-    "\16\0\2\24\5\0\4\24\1\122\15\24\16\0\2\24"+
-    "\5\0\10\24\1\123\11\24\16\0\2\24\5\0\16\24"+
-    "\1\124\3\24\16\0\2\24\5\0\4\24\1\125\15\24"+
-    "\16\0\2\24\5\0\15\24\1\126\4\24\16\0\2\24"+
-    "\5\0\17\24\1\127\2\24\16\0\2\24\5\0\15\24"+
-    "\1\130\4\24\16\0\2\24\5\0\4\24\1\131\15\24"+
-    "\16\0\2\24\5\0\17\24\1\132\2\24\16\0\2\24"+
-    "\5\0\12\24\1\133\7\24\2\0";
+    "\1\22\1\23\1\24\1\25\1\26\1\3\1\27\1\30"+
+    "\1\31\1\32\1\33\1\26\1\34\2\26\1\35\1\36"+
+    "\1\37\1\40\1\26\1\41\1\26\1\42\1\43\1\44"+
+    "\5\45\1\46\20\45\1\47\23\45\53\0\2\4\72\0"+
+    "\1\50\45\0\1\20\47\0\1\51\52\0\2\20\55\0"+
+    "\1\52\51\0\1\53\51\0\1\54\44\0\2\26\5\0"+
+    "\1\26\1\0\21\26\20\0\2\26\5\0\1\26\1\0"+
+    "\11\26\1\55\7\26\20\0\2\26\5\0\1\26\1\0"+
+    "\7\26\1\56\11\26\20\0\2\26\5\0\1\26\1\0"+
+    "\3\26\1\57\15\26\20\0\2\26\5\0\1\26\1\0"+
+    "\7\26\1\60\11\26\20\0\2\26\5\0\1\26\1\0"+
+    "\1\61\16\26\1\62\1\26\20\0\2\26\5\0\1\26"+
+    "\1\0\4\26\1\63\3\26\1\64\10\26\20\0\2\26"+
+    "\5\0\1\26\1\0\3\26\1\65\6\26\1\66\4\26"+
+    "\1\67\1\26\20\0\2\26\5\0\1\26\1\0\14\26"+
+    "\1\70\4\26\20\0\2\26\5\0\1\26\1\0\14\26"+
+    "\1\71\4\26\20\0\2\26\5\0\1\26\1\0\3\26"+
+    "\1\72\15\26\20\0\2\26\5\0\1\26\1\0\5\26"+
+    "\1\73\6\26\1\74\4\26\20\0\2\26\5\0\1\26"+
+    "\1\0\5\26\1\75\13\26\2\0\2\76\2\0\1\76"+
+    "\1\77\32\76\1\77\11\76\2\51\1\0\47\51\16\0"+
+    "\2\26\5\0\1\26\1\0\2\26\1\100\16\26\20\0"+
+    "\2\26\5\0\1\26\1\0\1\101\20\26\20\0\2\26"+
+    "\5\0\1\26\1\0\4\26\1\102\14\26\20\0\2\26"+
+    "\5\0\1\26\1\0\15\26\1\103\3\26\20\0\2\26"+
+    "\5\0\1\26\1\0\7\26\1\104\11\26\20\0\2\26"+
+    "\5\0\1\26\1\0\11\26\1\105\7\26\20\0\2\26"+
+    "\5\0\1\26\1\0\13\26\1\106\5\26\20\0\2\26"+
+    "\5\0\1\26\1\0\20\26\1\107\20\0\2\26\5\0"+
+    "\1\26\1\0\16\26\1\110\2\26\20\0\2\26\5\0"+
+    "\1\26\1\0\7\26\1\111\11\26\20\0\2\26\5\0"+
+    "\1\26\1\0\6\26\1\112\12\26\20\0\2\26\5\0"+
+    "\1\26\1\0\16\26\1\113\2\26\20\0\2\26\5\0"+
+    "\1\26\1\0\3\26\1\114\2\26\1\115\12\26\20\0"+
+    "\2\26\5\0\1\26\1\0\17\26\1\116\1\26\20\0"+
+    "\2\26\5\0\1\26\1\0\6\26\1\117\12\26\20\0"+
+    "\2\26\5\0\1\26\1\0\15\26\1\120\3\26\20\0"+
+    "\2\26\5\0\1\26\1\0\3\26\1\121\15\26\20\0"+
+    "\2\26\5\0\1\26\1\0\15\26\1\122\3\26\20\0"+
+    "\2\26\5\0\1\26\1\0\12\26\1\123\6\26\20\0"+
+    "\2\26\5\0\1\26\1\0\7\26\1\124\11\26\20\0"+
+    "\2\26\5\0\1\26\1\0\11\26\1\125\7\26\20\0"+
+    "\2\26\5\0\1\26\1\0\17\26\1\126\1\26\20\0"+
+    "\2\26\5\0\1\26\1\0\11\26\1\127\7\26\20\0"+
+    "\2\26\5\0\1\26\1\0\15\26\1\130\3\26\20\0"+
+    "\2\26\5\0\1\26\1\0\3\26\1\131\15\26\20\0"+
+    "\2\26\5\0\1\26\1\0\7\26\1\132\11\26\20\0"+
+    "\2\26\5\0\1\26\1\0\15\26\1\133\3\26\20\0"+
+    "\2\26\5\0\1\26\1\0\3\26\1\134\15\26\20\0"+
+    "\2\26\5\0\1\26\1\0\14\26\1\135\4\26\20\0"+
+    "\2\26\5\0\1\26\1\0\16\26\1\136\2\26\20\0"+
+    "\2\26\5\0\1\26\1\0\14\26\1\137\4\26\20\0"+
+    "\2\26\5\0\1\26\1\0\3\26\1\140\15\26\20\0"+
+    "\2\26\5\0\1\26\1\0\16\26\1\141\2\26\20\0"+
+    "\2\26\5\0\1\26\1\0\11\26\1\142\7\26\2\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[2262];
+    int [] result = new int[2520];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -253,11 +270,12 @@ class IcebergLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\2\1\5\11\1\1\1\11\1\1\1\11"+
-    "\1\1\2\11\20\1\3\11\1\1\3\11\64\1";
+    "\2\0\1\11\2\1\6\11\1\1\1\11\1\1\1\11"+
+    "\1\1\2\11\20\1\4\11\1\1\1\11\1\1\3\11"+
+    "\21\1\2\11\43\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[91];
+    int [] result = new int[98];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -582,212 +600,237 @@ class IcebergLexer implements FlexLexer {
             { return TokenType.BAD_CHARACTER;
             }
           // fall through
-          case 43: break;
+          case 48: break;
           case 2:
             { return TokenType.WHITE_SPACE;
             }
           // fall through
-          case 44: break;
-          case 3:
-            { return IcebergTypes.OPEN_PARENTHESIS;
-            }
-          // fall through
-          case 45: break;
-          case 4:
-            { return IcebergTypes.CLOSE_PARENTHESIS;
-            }
-          // fall through
-          case 46: break;
-          case 5:
-            { return IcebergTypes.STAR;
-            }
-          // fall through
-          case 47: break;
-          case 6:
-            { return IcebergTypes.PLUS;
-            }
-          // fall through
-          case 48: break;
-          case 7:
-            { return IcebergTypes.COMMA;
-            }
-          // fall through
           case 49: break;
-          case 8:
-            { return IcebergTypes.MINUS;
+          case 3:
+            { yybegin(STRING_STATE); return IcebergTypes.QUOTES;
             }
           // fall through
           case 50: break;
-          case 9:
-            { return IcebergTypes.DOT;
+          case 4:
+            { return IcebergTypes.OPEN_PARENTHESIS;
             }
           // fall through
           case 51: break;
-          case 10:
-            { return IcebergTypes.SLASH;
+          case 5:
+            { return IcebergTypes.CLOSE_PARENTHESIS;
             }
           // fall through
           case 52: break;
-          case 11:
-            { return IcebergTypes.NUMBER;
+          case 6:
+            { return IcebergTypes.STAR;
             }
           // fall through
           case 53: break;
-          case 12:
-            { return IcebergTypes.COLON;
+          case 7:
+            { return IcebergTypes.PLUS;
             }
           // fall through
           case 54: break;
-          case 13:
-            { return IcebergTypes.SEMICOLON;
+          case 8:
+            { return IcebergTypes.COMMA;
             }
           // fall through
           case 55: break;
-          case 14:
-            { return IcebergTypes.LT;
+          case 9:
+            { return IcebergTypes.MINUS;
             }
           // fall through
           case 56: break;
-          case 15:
-            { return IcebergTypes.ASSIGN;
+          case 10:
+            { return IcebergTypes.DOT;
             }
           // fall through
           case 57: break;
-          case 16:
-            { return IcebergTypes.GT;
+          case 11:
+            { return IcebergTypes.SLASH;
             }
           // fall through
           case 58: break;
-          case 17:
-            { return IcebergTypes.ID;
+          case 12:
+            { return IcebergTypes.NUMBER;
             }
           // fall through
           case 59: break;
-          case 18:
-            { return IcebergTypes.OPEN_BRACE;
+          case 13:
+            { return IcebergTypes.COLON;
             }
           // fall through
           case 60: break;
-          case 19:
-            { return IcebergTypes.CLOSE_BRACE;
+          case 14:
+            { return IcebergTypes.SEMICOLON;
             }
           // fall through
           case 61: break;
-          case 20:
-            { return IcebergTypes.NEQ;
+          case 15:
+            { return IcebergTypes.LT;
             }
           // fall through
           case 62: break;
-          case 21:
-            { return IcebergTypes.COMMENT;
+          case 16:
+            { return IcebergTypes.ASSIGN;
             }
           // fall through
           case 63: break;
-          case 22:
-            { return IcebergTypes.LE;
+          case 17:
+            { return IcebergTypes.GT;
             }
           // fall through
           case 64: break;
-          case 23:
-            { return IcebergTypes.EQ;
+          case 18:
+            { return IcebergTypes.ID;
             }
           // fall through
           case 65: break;
-          case 24:
-            { return IcebergTypes.GE;
+          case 19:
+            { return IcebergTypes.OPEN_BRACE;
             }
           // fall through
           case 66: break;
-          case 25:
-            { return IcebergTypes.IF;
+          case 20:
+            { return IcebergTypes.CLOSE_BRACE;
             }
           // fall through
           case 67: break;
-          case 26:
-            { return IcebergTypes.OR;
+          case 21:
+            { return IcebergTypes.CHAR;
             }
           // fall through
           case 68: break;
-          case 27:
-            { return IcebergTypes.AND;
+          case 22:
+            { yybegin(YYINITIAL); return IcebergTypes.QUOTES;
             }
           // fall through
           case 69: break;
-          case 28:
-            { return IcebergTypes.DEF;
+          case 23:
+            { return IcebergTypes.NEQ;
             }
           // fall through
           case 70: break;
-          case 29:
-            { return IcebergTypes.FUN;
+          case 24:
+            { return IcebergTypes.COMMENT;
             }
           // fall through
           case 71: break;
-          case 30:
-            { return IcebergTypes.NEW;
+          case 25:
+            { return IcebergTypes.LE;
             }
           // fall through
           case 72: break;
-          case 31:
-            { return IcebergTypes.NOT;
+          case 26:
+            { return IcebergTypes.EQ;
             }
           // fall through
           case 73: break;
-          case 32:
-            { return IcebergTypes.ELSE;
+          case 27:
+            { return IcebergTypes.GE;
             }
           // fall through
           case 74: break;
-          case 33:
-            { return IcebergTypes.NULL;
+          case 28:
+            { return IcebergTypes.IF;
             }
           // fall through
           case 75: break;
-          case 34:
-            { return IcebergTypes.THEN;
+          case 29:
+            { return IcebergTypes.OR;
             }
           // fall through
           case 76: break;
-          case 35:
-            { return IcebergTypes.THIS;
+          case 30:
+            { return IcebergTypes.INVALID_ESCAPE;
             }
           // fall through
           case 77: break;
-          case 36:
-            { return IcebergTypes.TRUE;
+          case 31:
+            { return IcebergTypes.VALID_ESCAPE;
             }
           // fall through
           case 78: break;
-          case 37:
-            { return IcebergTypes.CLASS;
+          case 32:
+            { return IcebergTypes.AND;
             }
           // fall through
           case 79: break;
-          case 38:
-            { return IcebergTypes.FALSE;
+          case 33:
+            { return IcebergTypes.DEF;
             }
           // fall through
           case 80: break;
-          case 39:
-            { return IcebergTypes.PRINT;
+          case 34:
+            { return IcebergTypes.FUN;
             }
           // fall through
           case 81: break;
-          case 40:
-            { return IcebergTypes.WHILE;
+          case 35:
+            { return IcebergTypes.NEW;
             }
           // fall through
           case 82: break;
-          case 41:
-            { return IcebergTypes.IMPORT;
+          case 36:
+            { return IcebergTypes.NOT;
             }
           // fall through
           case 83: break;
-          case 42:
-            { return IcebergTypes.RETURN;
+          case 37:
+            { return IcebergTypes.ELSE;
             }
           // fall through
           case 84: break;
+          case 38:
+            { return IcebergTypes.NULL;
+            }
+          // fall through
+          case 85: break;
+          case 39:
+            { return IcebergTypes.THEN;
+            }
+          // fall through
+          case 86: break;
+          case 40:
+            { return IcebergTypes.THIS;
+            }
+          // fall through
+          case 87: break;
+          case 41:
+            { return IcebergTypes.TRUE;
+            }
+          // fall through
+          case 88: break;
+          case 42:
+            { return IcebergTypes.CLASS;
+            }
+          // fall through
+          case 89: break;
+          case 43:
+            { return IcebergTypes.FALSE;
+            }
+          // fall through
+          case 90: break;
+          case 44:
+            { return IcebergTypes.PRINT;
+            }
+          // fall through
+          case 91: break;
+          case 45:
+            { return IcebergTypes.WHILE;
+            }
+          // fall through
+          case 92: break;
+          case 46:
+            { return IcebergTypes.IMPORT;
+            }
+          // fall through
+          case 93: break;
+          case 47:
+            { return IcebergTypes.RETURN;
+            }
+          // fall through
+          case 94: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

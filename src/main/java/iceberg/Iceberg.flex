@@ -60,22 +60,18 @@ ASSIGN = =
 ID     = [A-Za-z_][A-Za-z_0-9]*
 DOT    = "."
 
-//STRING
-//  : '"' (ESCAPE | CHAR)* '"'
-//  ;
-//fragment ESCAPE
-//  : '\\"'
-//  | '\\n'
-//  ;
-//fragment CHAR
-//  : ~ ["\\]
-//  ;
+QUOTES         = \"
+VALID_ESCAPE   = \\n | \\\"
+INVALID_ESCAPE = \\.
+CHAR           = [^\"\\]
 
 SEMICOLON = ;
 COMMA     = ,
 
 WS      = [ \n\t\r]+
 COMMENT = "//" [^\n\r]*
+
+%state STRING_STATE
 
 %%
 
@@ -122,6 +118,12 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {ASSIGN}                          { return IcebergTypes.ASSIGN; }
 <YYINITIAL> {ID}                              { return IcebergTypes.ID; }
 <YYINITIAL> {DOT}                             { return IcebergTypes.DOT; }
+
+<YYINITIAL>    {QUOTES}                       { yybegin(STRING_STATE); return IcebergTypes.QUOTES; }
+<STRING_STATE> {CHAR}                         { return IcebergTypes.CHAR; }
+<STRING_STATE> {VALID_ESCAPE}                 { return IcebergTypes.VALID_ESCAPE; }
+<STRING_STATE> {INVALID_ESCAPE}               { return IcebergTypes.INVALID_ESCAPE; }
+<STRING_STATE> {QUOTES}                       { yybegin(YYINITIAL); return IcebergTypes.QUOTES; }
 
 <YYINITIAL> {SEMICOLON}                       { return IcebergTypes.SEMICOLON; }
 <YYINITIAL> {COMMA}                           { return IcebergTypes.COMMA; }

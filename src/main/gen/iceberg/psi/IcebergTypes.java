@@ -36,6 +36,7 @@ public interface IcebergTypes {
 
   IElementType AND = new IcebergTokenType("AND");
   IElementType ASSIGN = new IcebergTokenType("ASSIGN");
+  IElementType CHAR = new IcebergTokenType("CHAR");
   IElementType CLASS = new IcebergTokenType("CLASS");
   IElementType CLOSE_BRACE = new IcebergTokenType("CLOSE_BRACE");
   IElementType CLOSE_PARENTHESIS = new IcebergTokenType("CLOSE_PARENTHESIS");
@@ -53,6 +54,7 @@ public interface IcebergTypes {
   IElementType ID = new IcebergTokenType("ID");
   IElementType IF = new IcebergTokenType("IF");
   IElementType IMPORT = new IcebergTokenType("IMPORT");
+  IElementType INVALID_ESCAPE = new IcebergTokenType("INVALID_ESCAPE");
   IElementType LE = new IcebergTokenType("LE");
   IElementType LT = new IcebergTokenType("LT");
   IElementType MINUS = new IcebergTokenType("MINUS");
@@ -66,6 +68,7 @@ public interface IcebergTypes {
   IElementType OR = new IcebergTokenType("OR");
   IElementType PLUS = new IcebergTokenType("PLUS");
   IElementType PRINT = new IcebergTokenType("PRINT");
+  IElementType QUOTES = new IcebergTokenType("QUOTES");
   IElementType RETURN = new IcebergTokenType("RETURN");
   IElementType SEMICOLON = new IcebergTokenType("SEMICOLON");
   IElementType SLASH = new IcebergTokenType("SLASH");
@@ -73,6 +76,7 @@ public interface IcebergTypes {
   IElementType THEN = new IcebergTokenType("THEN");
   IElementType THIS = new IcebergTokenType("THIS");
   IElementType TRUE = new IcebergTokenType("TRUE");
+  IElementType VALID_ESCAPE = new IcebergTokenType("VALID_ESCAPE");
   IElementType WHILE = new IcebergTokenType("WHILE");
 
   class Factory {

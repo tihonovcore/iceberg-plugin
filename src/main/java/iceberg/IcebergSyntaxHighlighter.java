@@ -25,6 +25,12 @@ public class IcebergSyntaxHighlighter extends SyntaxHighlighterBase {
         createTextAttributesKey("ICEBERG_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
     public static final TextAttributesKey ICEBERG_IDENTIFIER =
         createTextAttributesKey("ICEBERG_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
+    public static final TextAttributesKey ICEBERG_STRING =
+        createTextAttributesKey("ICEBERG_STRING", DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey ICEBERG_VALID_ESCAPE =
+        createTextAttributesKey("ICEBERG_VALID_ESCAPE", DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
+    public static final TextAttributesKey ICEBERG_INVALID_ESCAPE =
+        createTextAttributesKey("ICEBERG_INVALID_ESCAPE", DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE);
 
     public static final TextAttributesKey SEPARATOR =
         createTextAttributesKey("ICEBERG_SEPARATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
@@ -53,6 +59,9 @@ public class IcebergSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{ICEBERG_NUMBER};
     private static final TextAttributesKey[] OPERATOR_KEYS = new TextAttributesKey[]{ICEBERG_OPERATOR};
     private static final TextAttributesKey[] IDENTIFIER_KEYS = new TextAttributesKey[]{ICEBERG_IDENTIFIER};
+    private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{ICEBERG_STRING};
+    private static final TextAttributesKey[] VALID_STRING_ESCAPE_KEYS = new TextAttributesKey[]{ICEBERG_VALID_ESCAPE};
+    private static final TextAttributesKey[] INVALID_STRING_ESCAPE_KEYS = new TextAttributesKey[]{ICEBERG_INVALID_ESCAPE};
 
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
     private static final TextAttributesKey[] SEPARATOR_KEYS = new TextAttributesKey[]{SEPARATOR};
@@ -81,6 +90,21 @@ public class IcebergSyntaxHighlighter extends SyntaxHighlighterBase {
         if (IcebergTypes.ID.equals(tokenType)) {
             return IDENTIFIER_KEYS;
         }
+
+//        if (IcebergTypes.QUOTES.equals(tokenType)) {
+//            return STRING_KEYS;
+//        }
+        if (IcebergTypes.CHAR.equals(tokenType)) {
+            return STRING_KEYS;
+        }
+        if (IcebergTypes.VALID_ESCAPE.equals(tokenType)) {
+            return VALID_STRING_ESCAPE_KEYS;
+        }
+        if (IcebergTypes.INVALID_ESCAPE.equals(tokenType)) {
+            return INVALID_STRING_ESCAPE_KEYS;
+        }
+
+
 
         if (tokenType.equals(IcebergTypes.ATOM)) {
             return SEPARATOR_KEYS;

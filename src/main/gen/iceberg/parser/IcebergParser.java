@@ -127,7 +127,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   //     | NUMBER
   //     | FALSE
   //     | TRUE
-  //     //  | STRING
+  //     | QUOTES (CHAR|VALID_ESCAPE|INVALID_ESCAPE)* QUOTES
   //     | NULL
   //     | ID
   //     | THIS
@@ -140,6 +140,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, NUMBER);
     if (!r) r = consumeToken(b, FALSE);
     if (!r) r = consumeToken(b, TRUE);
+    if (!r) r = atom_5(b, l + 1);
     if (!r) r = consumeToken(b, NULL);
     if (!r) r = consumeToken(b, ID);
     if (!r) r = consumeToken(b, THIS);
@@ -156,6 +157,39 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     r = r && expression(b, l + 1);
     r = r && consumeToken(b, CLOSE_PARENTHESIS);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // QUOTES (CHAR|VALID_ESCAPE|INVALID_ESCAPE)* QUOTES
+  private static boolean atom_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "atom_5")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, QUOTES);
+    r = r && atom_5_1(b, l + 1);
+    r = r && consumeToken(b, QUOTES);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (CHAR|VALID_ESCAPE|INVALID_ESCAPE)*
+  private static boolean atom_5_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "atom_5_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!atom_5_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "atom_5_1", c)) break;
+    }
+    return true;
+  }
+
+  // CHAR|VALID_ESCAPE|INVALID_ESCAPE
+  private static boolean atom_5_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "atom_5_1_0")) return false;
+    boolean r;
+    r = consumeToken(b, CHAR);
+    if (!r) r = consumeToken(b, VALID_ESCAPE);
+    if (!r) r = consumeToken(b, INVALID_ESCAPE);
     return r;
   }
 
