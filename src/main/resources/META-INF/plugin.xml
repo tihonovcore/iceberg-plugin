@@ -37,5 +37,6 @@
         <lang.syntaxHighlighterFactory
             language="Iceberg"
             implementationClass="iceberg.IcebergSyntaxHighlighterFactory"/>
+        <configurationType implementation="iceberg.run.IcebergRunConfigurationType"/>
     </extensions>
 </idea-plugin>
