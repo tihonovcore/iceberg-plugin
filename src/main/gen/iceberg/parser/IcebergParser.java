@@ -32,7 +32,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
-    return icebergFile(b, l + 1);
+    return file(b, l + 1);
   }
 
   /* ********************************************************** */
@@ -48,6 +48,41 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, COMMENT);
     if (!r) r = consumeToken(b, ID);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // IMPORT ID (DOT ID)* SEMICOLON
+  public static boolean dependency(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dependency")) return false;
+    if (!nextTokenIs(b, IMPORT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, IMPORT, ID);
+    r = r && dependency_2(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    exit_section_(b, m, DEPENDENCY, r);
+    return r;
+  }
+
+  // (DOT ID)*
+  private static boolean dependency_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dependency_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!dependency_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "dependency_2", c)) break;
+    }
+    return true;
+  }
+
+  // DOT ID
+  private static boolean dependency_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dependency_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, DOT, ID);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -106,13 +141,35 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // dependency* statement*
+  static boolean file(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = file_0(b, l + 1);
+    r = r && file_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // dependency*
+  private static boolean file_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!dependency(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "file_0", c)) break;
+    }
+    return true;
+  }
+
   // statement*
-  static boolean icebergFile(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "icebergFile")) return false;
+  private static boolean file_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_1")) return false;
     while (true) {
       int c = current_position_(b);
       if (!statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "icebergFile", c)) break;
+      if (!empty_element_parsed_guard_(b, "file_1", c)) break;
     }
     return true;
   }

@@ -9,6 +9,7 @@ import iceberg.psi.impl.*;
 public interface IcebergTypes {
 
   IElementType ATOM = new IcebergElementType("ATOM");
+  IElementType DEPENDENCY = new IcebergElementType("DEPENDENCY");
   IElementType EXPRESSION = new IcebergElementType("EXPRESSION");
   IElementType FACTOR = new IcebergElementType("FACTOR");
   IElementType PRINT_STATEMENT = new IcebergElementType("PRINT_STATEMENT");
@@ -16,8 +17,10 @@ public interface IcebergTypes {
   IElementType TERM = new IcebergElementType("TERM");
 
   IElementType COMMENT = new IcebergTokenType("COMMENT");
+  IElementType DOT = new IcebergTokenType("DOT");
   IElementType FALSE = new IcebergTokenType("FALSE");
   IElementType ID = new IcebergTokenType("ID");
+  IElementType IMPORT = new IcebergTokenType("IMPORT");
   IElementType MINUS = new IcebergTokenType("MINUS");
   IElementType NULL = new IcebergTokenType("NULL");
   IElementType NUMBER = new IcebergTokenType("NUMBER");
@@ -33,6 +36,9 @@ public interface IcebergTypes {
       IElementType type = node.getElementType();
       if (type == ATOM) {
         return new IcebergAtomImpl(node);
+      }
+      else if (type == DEPENDENCY) {
+        return new IcebergDependencyImpl(node);
       }
       else if (type == EXPRESSION) {
         return new IcebergExpressionImpl(node);

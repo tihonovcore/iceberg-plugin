@@ -6,6 +6,7 @@ public interface IcebergTokenSets {
 
     TokenSet KEYWORDS = TokenSet.create(
         IcebergTypes.PRINT,
+        IcebergTypes.IMPORT, //TODO: cmd+b в джаву
         IcebergTypes.FALSE,
         IcebergTypes.TRUE
     );

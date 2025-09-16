@@ -11,6 +11,10 @@ public class IcebergVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitDependency(@NotNull IcebergDependency o) {
+    visitPsiElement(o);
+  }
+
   public void visitExpression(@NotNull IcebergExpression o) {
     visitPsiElement(o);
   }

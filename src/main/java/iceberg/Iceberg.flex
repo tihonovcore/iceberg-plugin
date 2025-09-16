@@ -47,7 +47,7 @@ PRINT  = print
 //CLASS  : 'class';
 //NEW    : 'new';
 //THIS   : 'this';
-//IMPORT : 'import';
+IMPORT = import
 
 NUMBER = 0 | -? [1-9][0-9]*
 FALSE  = false
@@ -58,8 +58,8 @@ NULL   = null
 //COLON  : ':';
 //ASSIGN : '=';
 ID     = [A-Za-z_][A-Za-z_0-9]*
-//DOT    : '.';
-//
+DOT    = "."
+
 //STRING
 //  : '"' (ESCAPE | CHAR)* '"'
 //  ;
@@ -70,7 +70,7 @@ ID     = [A-Za-z_][A-Za-z_0-9]*
 //fragment CHAR
 //  : ~ ["\\]
 //  ;
-//
+
 SEMICOLON = ;
 COMMA     = ,
 
@@ -85,6 +85,7 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {SLASH}                           { return IcebergTypes.SLASH; }
 
 <YYINITIAL> {PRINT}                           { return IcebergTypes.PRINT; }
+<YYINITIAL> {IMPORT}                          { return IcebergTypes.IMPORT; }
 
 <YYINITIAL> {NUMBER}                          { return IcebergTypes.NUMBER; }
 <YYINITIAL> {FALSE}                           { return IcebergTypes.FALSE; }
@@ -92,6 +93,7 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {NULL}                            { return IcebergTypes.NULL; }
 
 <YYINITIAL> {ID}                              { return IcebergTypes.ID; }
+<YYINITIAL> {DOT}                             { return IcebergTypes.DOT; }
 
 <YYINITIAL> {SEMICOLON}                       { return IcebergTypes.SEMICOLON; }
 //<YYINITIAL> {COMMA}                           { return IcebergTypes.COMMA; }

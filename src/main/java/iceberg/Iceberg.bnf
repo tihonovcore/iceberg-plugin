@@ -13,12 +13,15 @@
   tokenTypeClass="iceberg.psi.IcebergTokenType"
 }
 
-//file : dependency* statement* EOF;
-//
-//dependency
-//  : IMPORT ID (DOT ID)* SEMICOLON
-//  ;
-//
+file
+  ::= dependency* statement*
+
+dependency
+  ::= IMPORT ID (DOT ID)* SEMICOLON
+
+statement
+  ::= (printStatement SEMICOLON) | COMMENT
+
 //statement
 //  : expression SEMICOLON
 //  | printStatement SEMICOLON
@@ -30,9 +33,10 @@
 //  | returnStatement SEMICOLON
 //  | block
 //  ;
-//
-//printStatement : PRINT expression;
-//
+
+printStatement
+  ::= PRINT expression
+
 //defStatement
 //  : DEF name=ID
 //  ( COLON type=ID (ASSIGN expression)?
@@ -107,19 +111,6 @@
 //  | ID
 //  | THIS
 //  ;
-
-
-//icebergFile ::= item_*
-
-//private item_ ::= (property|COMMENT|CRLF)
-
-//property ::= (KEY? SEPARATOR VALUE?) | KEY
-
-icebergFile ::= statement*
-
-statement ::= (printStatement SEMICOLON) | COMMENT
-
-printStatement ::= PRINT expression
 
 expression
   ::= term ((PLUS | MINUS) term)*
