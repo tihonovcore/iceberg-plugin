@@ -11,14 +11,18 @@ public interface IcebergTypes {
   IElementType ATOM = new IcebergElementType("ATOM");
   IElementType DEF_STATEMENT = new IcebergElementType("DEF_STATEMENT");
   IElementType DEPENDENCY = new IcebergElementType("DEPENDENCY");
+  IElementType EQUALITY_EXPRESSION = new IcebergElementType("EQUALITY_EXPRESSION");
   IElementType EXPRESSION = new IcebergElementType("EXPRESSION");
   IElementType FACTOR = new IcebergElementType("FACTOR");
   IElementType IF_STATEMENT = new IcebergElementType("IF_STATEMENT");
+  IElementType LOGICAL_AND_EXPRESSION = new IcebergElementType("LOGICAL_AND_EXPRESSION");
+  IElementType LOGICAL_OR_EXPRESSION = new IcebergElementType("LOGICAL_OR_EXPRESSION");
   IElementType PRINT_STATEMENT = new IcebergElementType("PRINT_STATEMENT");
   IElementType STATEMENT = new IcebergElementType("STATEMENT");
   IElementType TERM = new IcebergElementType("TERM");
   IElementType WHILE_STATEMENT = new IcebergElementType("WHILE_STATEMENT");
 
+  IElementType AND = new IcebergTokenType("AND");
   IElementType ASSIGN = new IcebergTokenType("ASSIGN");
   IElementType COLON = new IcebergTokenType("COLON");
   IElementType COMMENT = new IcebergTokenType("COMMENT");
@@ -32,6 +36,7 @@ public interface IcebergTypes {
   IElementType MINUS = new IcebergTokenType("MINUS");
   IElementType NULL = new IcebergTokenType("NULL");
   IElementType NUMBER = new IcebergTokenType("NUMBER");
+  IElementType OR = new IcebergTokenType("OR");
   IElementType PLUS = new IcebergTokenType("PLUS");
   IElementType PRINT = new IcebergTokenType("PRINT");
   IElementType SEMICOLON = new IcebergTokenType("SEMICOLON");
@@ -53,6 +58,9 @@ public interface IcebergTypes {
       else if (type == DEPENDENCY) {
         return new IcebergDependencyImpl(node);
       }
+      else if (type == EQUALITY_EXPRESSION) {
+        return new IcebergEqualityExpressionImpl(node);
+      }
       else if (type == EXPRESSION) {
         return new IcebergExpressionImpl(node);
       }
@@ -61,6 +69,12 @@ public interface IcebergTypes {
       }
       else if (type == IF_STATEMENT) {
         return new IcebergIfStatementImpl(node);
+      }
+      else if (type == LOGICAL_AND_EXPRESSION) {
+        return new IcebergLogicalAndExpressionImpl(node);
+      }
+      else if (type == LOGICAL_OR_EXPRESSION) {
+        return new IcebergLogicalOrExpressionImpl(node);
       }
       else if (type == PRINT_STATEMENT) {
         return new IcebergPrintStatementImpl(node);

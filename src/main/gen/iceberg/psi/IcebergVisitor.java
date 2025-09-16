@@ -19,6 +19,10 @@ public class IcebergVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitEqualityExpression(@NotNull IcebergEqualityExpression o) {
+    visitPsiElement(o);
+  }
+
   public void visitExpression(@NotNull IcebergExpression o) {
     visitPsiElement(o);
   }
@@ -28,6 +32,14 @@ public class IcebergVisitor extends PsiElementVisitor {
   }
 
   public void visitIfStatement(@NotNull IcebergIfStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitLogicalAndExpression(@NotNull IcebergLogicalAndExpression o) {
+    visitPsiElement(o);
+  }
+
+  public void visitLogicalOrExpression(@NotNull IcebergLogicalOrExpression o) {
     visitPsiElement(o);
   }
 

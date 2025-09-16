@@ -11,14 +11,14 @@ import static iceberg.psi.IcebergTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import iceberg.psi.*;
 
-public class IcebergExpressionImpl extends ASTWrapperPsiElement implements IcebergExpression {
+public class IcebergEqualityExpressionImpl extends ASTWrapperPsiElement implements IcebergEqualityExpression {
 
-  public IcebergExpressionImpl(@NotNull ASTNode node) {
+  public IcebergEqualityExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull IcebergVisitor visitor) {
-    visitor.visitExpression(this);
+    visitor.visitEqualityExpression(this);
   }
 
   @Override
@@ -29,8 +29,8 @@ public class IcebergExpressionImpl extends ASTWrapperPsiElement implements Icebe
 
   @Override
   @NotNull
-  public List<IcebergLogicalOrExpression> getLogicalOrExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, IcebergLogicalOrExpression.class);
+  public List<IcebergTerm> getTermList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, IcebergTerm.class);
   }
 
 }

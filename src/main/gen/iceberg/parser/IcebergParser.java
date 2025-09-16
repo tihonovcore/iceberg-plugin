@@ -155,45 +155,75 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // term ((PLUS | MINUS) term)*
-  public static boolean expression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "expression")) return false;
+  // term                 ((PLUS | MINUS) term)*
+  public static boolean equalityExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "equalityExpression")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, EXPRESSION, "<expression>");
+    Marker m = enter_section_(b, l, _NONE_, EQUALITY_EXPRESSION, "<equality expression>");
     r = term(b, l + 1);
-    r = r && expression_1(b, l + 1);
+    r = r && equalityExpression_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // ((PLUS | MINUS) term)*
-  private static boolean expression_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "expression_1")) return false;
+  private static boolean equalityExpression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "equalityExpression_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!expression_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "expression_1", c)) break;
+      if (!equalityExpression_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "equalityExpression_1", c)) break;
     }
     return true;
   }
 
   // (PLUS | MINUS) term
-  private static boolean expression_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "expression_1_0")) return false;
+  private static boolean equalityExpression_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "equalityExpression_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = expression_1_0_0(b, l + 1);
+    r = equalityExpression_1_0_0(b, l + 1);
     r = r && term(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // PLUS | MINUS
-  private static boolean expression_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "expression_1_0_0")) return false;
+  private static boolean equalityExpression_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "equalityExpression_1_0_0")) return false;
     boolean r;
     r = consumeToken(b, PLUS);
     if (!r) r = consumeToken(b, MINUS);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // logicalOrExpression  (ASSIGN logicalOrExpression)?
+  public static boolean expression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, EXPRESSION, "<expression>");
+    r = logicalOrExpression(b, l + 1);
+    r = r && expression_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (ASSIGN logicalOrExpression)?
+  private static boolean expression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression_1")) return false;
+    expression_1_0(b, l + 1);
+    return true;
+  }
+
+  // ASSIGN logicalOrExpression
+  private static boolean expression_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ASSIGN);
+    r = r && logicalOrExpression(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -279,6 +309,74 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // equalityExpression   (AND equalityExpression)*
+  public static boolean logicalAndExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "logicalAndExpression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, LOGICAL_AND_EXPRESSION, "<logical and expression>");
+    r = equalityExpression(b, l + 1);
+    r = r && logicalAndExpression_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (AND equalityExpression)*
+  private static boolean logicalAndExpression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "logicalAndExpression_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!logicalAndExpression_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "logicalAndExpression_1", c)) break;
+    }
+    return true;
+  }
+
+  // AND equalityExpression
+  private static boolean logicalAndExpression_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "logicalAndExpression_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, AND);
+    r = r && equalityExpression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // logicalAndExpression (OR logicalAndExpression)*
+  public static boolean logicalOrExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "logicalOrExpression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, LOGICAL_OR_EXPRESSION, "<logical or expression>");
+    r = logicalAndExpression(b, l + 1);
+    r = r && logicalOrExpression_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (OR logicalAndExpression)*
+  private static boolean logicalOrExpression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "logicalOrExpression_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!logicalOrExpression_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "logicalOrExpression_1", c)) break;
+    }
+    return true;
+  }
+
+  // OR logicalAndExpression
+  private static boolean logicalOrExpression_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "logicalOrExpression_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OR);
+    r = r && logicalAndExpression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // PRINT expression
   public static boolean printStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "printStatement")) return false;
@@ -292,9 +390,9 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // expression
+  // expression     SEMICOLON
   //     | printStatement SEMICOLON
-  //     | defStatement SEMICOLON
+  //     | defStatement   SEMICOLON
   //     | ifStatement
   //     | whileStatement
   //     | COMMENT
@@ -302,13 +400,24 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "statement")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, STATEMENT, "<statement>");
-    r = expression(b, l + 1);
+    r = statement_0(b, l + 1);
     if (!r) r = statement_1(b, l + 1);
     if (!r) r = statement_2(b, l + 1);
     if (!r) r = ifStatement(b, l + 1);
     if (!r) r = whileStatement(b, l + 1);
     if (!r) r = consumeToken(b, COMMENT);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // expression     SEMICOLON
+  private static boolean statement_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "statement_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = expression(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -323,7 +432,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // defStatement SEMICOLON
+  // defStatement   SEMICOLON
   private static boolean statement_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement_2")) return false;
     boolean r;
@@ -335,7 +444,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // factor ((STAR | SLASH) factor)*
+  // factor               ((STAR | SLASH) factor)*
   public static boolean term(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "term")) return false;
     boolean r;

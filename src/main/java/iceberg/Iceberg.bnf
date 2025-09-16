@@ -20,9 +20,9 @@ dependency
   ::= IMPORT ID (DOT ID)* SEMICOLON
 
 statement
-  ::= expression
+  ::= expression     SEMICOLON
     | printStatement SEMICOLON
-    | defStatement SEMICOLON
+    | defStatement   SEMICOLON
     | ifStatement
     | whileStatement
     | COMMENT
@@ -85,20 +85,20 @@ whileStatement
 //block : OPEN_BRACE statement* CLOSE_BRACE;
 
 //expression
-//  : NEW className=ID                                      #newExpression
-//  | NOT atom                                              #negateExpression
-//  | MINUS atom                                            #unaryMinusExpression
-//  | expression DOT  (ID | functionCall)                   #memberExpression
-//  | left=expression (STAR | SLASH)      right=expression  #multiplicationExpression
-//  | left=expression (PLUS | MINUS)      right=expression  #additionExpression
-//  | left=expression (LE | GE | LT | GT) right=expression  #relationalExpression
-//  | left=expression (EQ | NEQ)          right=expression  #equalityExression
-//  | left=expression AND                 right=expression  #logicalAndExpression
-//  | left=expression OR                  right=expression  #logicalOrExpression
-//  | left=expression ASSIGN              right=expression  #assignExpression
-//  | atom                                                  #atomExpression
+//  : NEW className=ID
+//  | NOT atom
+//  | MINUS atom
+//  | expression DOT  (ID | functionCall)
+//  | left=expression (STAR | SLASH)      right=expression
+//  | left=expression (PLUS | MINUS)      right=expression
+//  | left=expression (LE | GE | LT | GT) right=expression
+//  | left=expression (EQ | NEQ)          right=expression
+//  | left=expression AND                 right=expression
+//  | left=expression OR                  right=expression
+//  | left=expression ASSIGN              right=expression
+//  | atom
 //  ;
-//
+
 //atom
 //  : OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
 //  | functionCall
@@ -110,22 +110,16 @@ whileStatement
 //  | THIS
 //  ;
 
-expression
-  ::= term ((PLUS | MINUS) term)*
-
-term
-  ::= factor ((STAR | SLASH) factor)*
-
-factor
-  ::= atom
+expression           ::= logicalOrExpression  (ASSIGN logicalOrExpression)?
+logicalOrExpression  ::= logicalAndExpression (OR logicalAndExpression)*
+logicalAndExpression ::= equalityExpression   (AND equalityExpression)*
+equalityExpression   ::= term                 ((PLUS | MINUS) term)*
+term                 ::= factor               ((STAR | SLASH) factor)*
+factor               ::= atom
 
 //  | left=expression (PLUS | MINUS)      right=expression  #additionExpression
 //  | left=expression (LE | GE | LT | GT) right=expression  #relationalExpression
 //  | left=expression (EQ | NEQ)          right=expression  #equalityExression
-//  | left=expression AND                 right=expression  #logicalAndExpression
-//  | left=expression OR                  right=expression  #logicalOrExpression
-//  | left=expression ASSIGN              right=expression  #assignExpression
-//  | atom                                                  #atomExpression
-//  ;
+
 
 atom ::= NUMBER|FALSE|TRUE|NULL|COMMENT|ID

@@ -34,8 +34,8 @@ SLASH = "/"
 //GT : '>';
 //
 //NOT : 'not';
-//AND : 'and';
-//OR  : 'or';
+AND = and
+OR  = or
 
 PRINT  = print
 WHILE  = while
@@ -83,6 +83,9 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {MINUS}                           { return IcebergTypes.MINUS; }
 <YYINITIAL> {STAR}                            { return IcebergTypes.STAR; }
 <YYINITIAL> {SLASH}                           { return IcebergTypes.SLASH; }
+
+<YYINITIAL> {AND}                             { return IcebergTypes.AND; }
+<YYINITIAL> {OR}                              { return IcebergTypes.OR; }
 
 <YYINITIAL> {PRINT}                           { return IcebergTypes.PRINT; }
 <YYINITIAL> {WHILE}                           { return IcebergTypes.WHILE; }
