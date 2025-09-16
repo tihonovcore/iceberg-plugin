@@ -11,14 +11,14 @@ import static iceberg.psi.IcebergTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import iceberg.psi.*;
 
-public class IcebergUnaryExpressionImpl extends ASTWrapperPsiElement implements IcebergUnaryExpression {
+public class IcebergFieldDefinitionImpl extends ASTWrapperPsiElement implements IcebergFieldDefinition {
 
-  public IcebergUnaryExpressionImpl(@NotNull ASTNode node) {
+  public IcebergFieldDefinitionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull IcebergVisitor visitor) {
-    visitor.visitUnaryExpression(this);
+    visitor.visitFieldDefinition(this);
   }
 
   @Override
@@ -29,14 +29,8 @@ public class IcebergUnaryExpressionImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @Nullable
-  public IcebergAtom getAtom() {
-    return findChildByClass(IcebergAtom.class);
-  }
-
-  @Override
-  @Nullable
-  public IcebergUnaryExpression getUnaryExpression() {
-    return findChildByClass(IcebergUnaryExpression.class);
+  public IcebergExpression getExpression() {
+    return findChildByClass(IcebergExpression.class);
   }
 
 }

@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface IcebergMemberAccessExpression extends PsiElement {
+public interface IcebergFieldDefinition extends PsiElement {
 
-  @NotNull
-  List<IcebergArguments> getArgumentsList();
-
-  @NotNull
-  IcebergUnaryExpression getUnaryExpression();
+  @Nullable
+  IcebergExpression getExpression();
 
 }

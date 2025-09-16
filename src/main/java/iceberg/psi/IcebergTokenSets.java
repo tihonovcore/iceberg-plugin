@@ -12,6 +12,9 @@ public interface IcebergTokenSets {
         IcebergTypes.ELSE,
         IcebergTypes.FUN,
         IcebergTypes.RETURN,
+        IcebergTypes.CLASS,
+        IcebergTypes.NEW,
+        IcebergTypes.THIS,
         IcebergTypes.IMPORT, //TODO: cmd+b в джаву
         IcebergTypes.FALSE,
         IcebergTypes.TRUE,

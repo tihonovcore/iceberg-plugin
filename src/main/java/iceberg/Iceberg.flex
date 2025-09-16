@@ -33,7 +33,7 @@ GE = >=
 LT = <
 GT = >
 
-//NOT : 'not';
+NOT = not
 AND = and
 OR  = or
 
@@ -44,9 +44,9 @@ THEN   = then
 ELSE   = else
 FUN    = fun
 RETURN = return
-//CLASS  : 'class';
-//NEW    : 'new';
-//THIS   : 'this';
+CLASS  = class
+NEW    = new
+THIS   = this
 IMPORT = import
 
 NUMBER = 0 | -? [1-9][0-9]*
@@ -96,6 +96,7 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {LT}                              { return IcebergTypes.LT; }
 <YYINITIAL> {GT}                              { return IcebergTypes.GT; }
 
+<YYINITIAL> {NOT}                             { return IcebergTypes.NOT; }
 <YYINITIAL> {AND}                             { return IcebergTypes.AND; }
 <YYINITIAL> {OR}                              { return IcebergTypes.OR; }
 
@@ -106,6 +107,9 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {ELSE}                            { return IcebergTypes.ELSE; }
 <YYINITIAL> {FUN}                             { return IcebergTypes.FUN; }
 <YYINITIAL> {RETURN}                          { return IcebergTypes.RETURN; }
+<YYINITIAL> {CLASS}                           { return IcebergTypes.CLASS; }
+<YYINITIAL> {NEW}                             { return IcebergTypes.NEW; }
+<YYINITIAL> {THIS}                            { return IcebergTypes.THIS; }
 <YYINITIAL> {IMPORT}                          { return IcebergTypes.IMPORT; }
 
 <YYINITIAL> {NUMBER}                          { return IcebergTypes.NUMBER; }

@@ -11,14 +11,14 @@ import static iceberg.psi.IcebergTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import iceberg.psi.*;
 
-public class IcebergUnaryExpressionImpl extends ASTWrapperPsiElement implements IcebergUnaryExpression {
+public class IcebergClassDefinitionStatementImpl extends ASTWrapperPsiElement implements IcebergClassDefinitionStatement {
 
-  public IcebergUnaryExpressionImpl(@NotNull ASTNode node) {
+  public IcebergClassDefinitionStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull IcebergVisitor visitor) {
-    visitor.visitUnaryExpression(this);
+    visitor.visitClassDefinitionStatement(this);
   }
 
   @Override
@@ -28,15 +28,15 @@ public class IcebergUnaryExpressionImpl extends ASTWrapperPsiElement implements 
   }
 
   @Override
-  @Nullable
-  public IcebergAtom getAtom() {
-    return findChildByClass(IcebergAtom.class);
+  @NotNull
+  public List<IcebergFieldDefinition> getFieldDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, IcebergFieldDefinition.class);
   }
 
   @Override
-  @Nullable
-  public IcebergUnaryExpression getUnaryExpression() {
-    return findChildByClass(IcebergUnaryExpression.class);
+  @NotNull
+  public List<IcebergFunctionDefinitionStatement> getFunctionDefinitionStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, IcebergFunctionDefinitionStatement.class);
   }
 
 }

@@ -11,6 +11,9 @@ public interface IcebergStatement extends PsiElement {
   IcebergBlock getBlock();
 
   @Nullable
+  IcebergClassDefinitionStatement getClassDefinitionStatement();
+
+  @Nullable
   IcebergDefStatement getDefStatement();
 
   @Nullable

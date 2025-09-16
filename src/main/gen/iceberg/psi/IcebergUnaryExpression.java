@@ -7,7 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface IcebergUnaryExpression extends PsiElement {
 
-  @NotNull
+  @Nullable
   IcebergAtom getAtom();
+
+  @Nullable
+  IcebergUnaryExpression getUnaryExpression();
 
 }

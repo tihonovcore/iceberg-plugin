@@ -23,6 +23,10 @@ public class IcebergVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitClassDefinitionStatement(@NotNull IcebergClassDefinitionStatement o) {
+    visitPsiElement(o);
+  }
+
   public void visitDefStatement(@NotNull IcebergDefStatement o) {
     visitPsiElement(o);
   }
@@ -36,6 +40,10 @@ public class IcebergVisitor extends PsiElementVisitor {
   }
 
   public void visitExpression(@NotNull IcebergExpression o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFieldDefinition(@NotNull IcebergFieldDefinition o) {
     visitPsiElement(o);
   }
 

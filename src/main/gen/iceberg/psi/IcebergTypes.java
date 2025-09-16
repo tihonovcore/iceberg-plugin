@@ -12,10 +12,12 @@ public interface IcebergTypes {
   IElementType ARGUMENTS = new IcebergElementType("ARGUMENTS");
   IElementType ATOM = new IcebergElementType("ATOM");
   IElementType BLOCK = new IcebergElementType("BLOCK");
+  IElementType CLASS_DEFINITION_STATEMENT = new IcebergElementType("CLASS_DEFINITION_STATEMENT");
   IElementType DEF_STATEMENT = new IcebergElementType("DEF_STATEMENT");
   IElementType DEPENDENCY = new IcebergElementType("DEPENDENCY");
   IElementType EQUALITY_EXPRESSION = new IcebergElementType("EQUALITY_EXPRESSION");
   IElementType EXPRESSION = new IcebergElementType("EXPRESSION");
+  IElementType FIELD_DEFINITION = new IcebergElementType("FIELD_DEFINITION");
   IElementType FUNCTION_CALL = new IcebergElementType("FUNCTION_CALL");
   IElementType FUNCTION_DEFINITION_STATEMENT = new IcebergElementType("FUNCTION_DEFINITION_STATEMENT");
   IElementType IF_STATEMENT = new IcebergElementType("IF_STATEMENT");
@@ -34,6 +36,7 @@ public interface IcebergTypes {
 
   IElementType AND = new IcebergTokenType("AND");
   IElementType ASSIGN = new IcebergTokenType("ASSIGN");
+  IElementType CLASS = new IcebergTokenType("CLASS");
   IElementType CLOSE_BRACE = new IcebergTokenType("CLOSE_BRACE");
   IElementType CLOSE_PARENTHESIS = new IcebergTokenType("CLOSE_PARENTHESIS");
   IElementType COLON = new IcebergTokenType("COLON");
@@ -54,6 +57,8 @@ public interface IcebergTypes {
   IElementType LT = new IcebergTokenType("LT");
   IElementType MINUS = new IcebergTokenType("MINUS");
   IElementType NEQ = new IcebergTokenType("NEQ");
+  IElementType NEW = new IcebergTokenType("NEW");
+  IElementType NOT = new IcebergTokenType("NOT");
   IElementType NULL = new IcebergTokenType("NULL");
   IElementType NUMBER = new IcebergTokenType("NUMBER");
   IElementType OPEN_BRACE = new IcebergTokenType("OPEN_BRACE");
@@ -66,6 +71,7 @@ public interface IcebergTypes {
   IElementType SLASH = new IcebergTokenType("SLASH");
   IElementType STAR = new IcebergTokenType("STAR");
   IElementType THEN = new IcebergTokenType("THEN");
+  IElementType THIS = new IcebergTokenType("THIS");
   IElementType TRUE = new IcebergTokenType("TRUE");
   IElementType WHILE = new IcebergTokenType("WHILE");
 
@@ -84,6 +90,9 @@ public interface IcebergTypes {
       else if (type == BLOCK) {
         return new IcebergBlockImpl(node);
       }
+      else if (type == CLASS_DEFINITION_STATEMENT) {
+        return new IcebergClassDefinitionStatementImpl(node);
+      }
       else if (type == DEF_STATEMENT) {
         return new IcebergDefStatementImpl(node);
       }
@@ -95,6 +104,9 @@ public interface IcebergTypes {
       }
       else if (type == EXPRESSION) {
         return new IcebergExpressionImpl(node);
+      }
+      else if (type == FIELD_DEFINITION) {
+        return new IcebergFieldDefinitionImpl(node);
       }
       else if (type == FUNCTION_CALL) {
         return new IcebergFunctionCallImpl(node);

@@ -27,7 +27,7 @@ statement
     | ifStatement
     | whileStatement
     | functionDefinitionStatement
-//    | classDefinitionStatement
+    | classDefinitionStatement
     | block
     | COMMENT
 
@@ -50,13 +50,11 @@ ifStatement
 whileStatement
   ::= WHILE expression THEN statement
 
-//classDefinitionStatement
-//  : CLASS name=ID OPEN_BRACE fieldDefinition* functionDefinitionStatement* CLOSE_BRACE
-//  ;
-//
-//fieldDefinition
-//  : DEF name=ID COLON type=ID (ASSIGN expression)?
-//  ;
+classDefinitionStatement
+  ::= CLASS ID OPEN_BRACE fieldDefinition* functionDefinitionStatement* CLOSE_BRACE
+
+fieldDefinition
+  ::= DEF ID COLON ID (ASSIGN expression)?
 
 functionDefinitionStatement
   ::= FUN ID OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS (COLON ID)? block
@@ -76,14 +74,13 @@ equalityExpression       ::= relationalExpression     ((EQ | NEQ) relationalExpr
 relationalExpression     ::= additiveExpression       ((LT | LE | GT | GE) additiveExpression)*
 additiveExpression       ::= multiplicativeExpression ((PLUS | MINUS) multiplicativeExpression)*
 multiplicativeExpression ::= memberAccessExpression   ((STAR | SLASH) memberAccessExpression)*
-memberAccessExpression   ::= unaryExpression          (DOT (ID | functionCall))*
-//unaryExpression
-//  ::= (NEW ID)
-//    | (NOT unaryExpression)
-//    | (MINUS unaryExpression)
-//    | atom
-//    ;
-unaryExpression          ::= atom
+memberAccessExpression   ::= unaryExpression          (DOT ID (OPEN_PARENTHESIS arguments CLOSE_PARENTHESIS)?)*
+
+unaryExpression
+  ::= (NEW ID)
+    | (NOT unaryExpression)
+    | (MINUS unaryExpression)
+    | atom
 
 atom
   ::= OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
@@ -94,4 +91,4 @@ atom
     //  | STRING
     | NULL
     | ID
-    //  | THIS
+    | THIS
