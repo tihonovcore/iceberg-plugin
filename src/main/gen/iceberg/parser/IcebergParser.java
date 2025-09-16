@@ -52,6 +52,74 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // DEF ID
+  //   ( COLON ID (ASSIGN expression)?
+  //   | ASSIGN expression
+  //   )
+  public static boolean defStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "defStatement")) return false;
+    if (!nextTokenIs(b, DEF)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, DEF, ID);
+    r = r && defStatement_2(b, l + 1);
+    exit_section_(b, m, DEF_STATEMENT, r);
+    return r;
+  }
+
+  // COLON ID (ASSIGN expression)?
+  //   | ASSIGN expression
+  private static boolean defStatement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "defStatement_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = defStatement_2_0(b, l + 1);
+    if (!r) r = defStatement_2_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // COLON ID (ASSIGN expression)?
+  private static boolean defStatement_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "defStatement_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, COLON, ID);
+    r = r && defStatement_2_0_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (ASSIGN expression)?
+  private static boolean defStatement_2_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "defStatement_2_0_2")) return false;
+    defStatement_2_0_2_0(b, l + 1);
+    return true;
+  }
+
+  // ASSIGN expression
+  private static boolean defStatement_2_0_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "defStatement_2_0_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ASSIGN);
+    r = r && expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ASSIGN expression
+  private static boolean defStatement_2_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "defStatement_2_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ASSIGN);
+    r = r && expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // IMPORT ID (DOT ID)* SEMICOLON
   public static boolean dependency(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "dependency")) return false;
@@ -175,6 +243,42 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // IF expression
+  //       THEN statement
+  //       (ELSE statement)?
+  public static boolean ifStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifStatement")) return false;
+    if (!nextTokenIs(b, IF)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IF);
+    r = r && expression(b, l + 1);
+    r = r && consumeToken(b, THEN);
+    r = r && statement(b, l + 1);
+    r = r && ifStatement_4(b, l + 1);
+    exit_section_(b, m, IF_STATEMENT, r);
+    return r;
+  }
+
+  // (ELSE statement)?
+  private static boolean ifStatement_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifStatement_4")) return false;
+    ifStatement_4_0(b, l + 1);
+    return true;
+  }
+
+  // ELSE statement
+  private static boolean ifStatement_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifStatement_4_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ELSE);
+    r = r && statement(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // PRINT expression
   public static boolean printStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "printStatement")) return false;
@@ -188,24 +292,43 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (printStatement SEMICOLON) | COMMENT
+  // expression
+  //     | printStatement SEMICOLON
+  //     | defStatement SEMICOLON
+  //     | ifStatement
+  //     | whileStatement
+  //     | COMMENT
   public static boolean statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement")) return false;
-    if (!nextTokenIs(b, "<statement>", COMMENT, PRINT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, STATEMENT, "<statement>");
-    r = statement_0(b, l + 1);
+    r = expression(b, l + 1);
+    if (!r) r = statement_1(b, l + 1);
+    if (!r) r = statement_2(b, l + 1);
+    if (!r) r = ifStatement(b, l + 1);
+    if (!r) r = whileStatement(b, l + 1);
     if (!r) r = consumeToken(b, COMMENT);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // printStatement SEMICOLON
-  private static boolean statement_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "statement_0")) return false;
+  private static boolean statement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "statement_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = printStatement(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // defStatement SEMICOLON
+  private static boolean statement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "statement_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = defStatement(b, l + 1);
     r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, m, null, r);
     return r;
@@ -251,6 +374,21 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     boolean r;
     r = consumeToken(b, STAR);
     if (!r) r = consumeToken(b, SLASH);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // WHILE expression THEN statement
+  public static boolean whileStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "whileStatement")) return false;
+    if (!nextTokenIs(b, WHILE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, WHILE);
+    r = r && expression(b, l + 1);
+    r = r && consumeToken(b, THEN);
+    r = r && statement(b, l + 1);
+    exit_section_(b, m, WHILE_STATEMENT, r);
     return r;
   }
 

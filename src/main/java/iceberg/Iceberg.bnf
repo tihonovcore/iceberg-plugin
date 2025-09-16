@@ -20,14 +20,14 @@ dependency
   ::= IMPORT ID (DOT ID)* SEMICOLON
 
 statement
-  ::= (printStatement SEMICOLON) | COMMENT
+  ::= expression
+    | printStatement SEMICOLON
+    | defStatement SEMICOLON
+    | ifStatement
+    | whileStatement
+    | COMMENT
 
 //statement
-//  : expression SEMICOLON
-//  | printStatement SEMICOLON
-//  | defStatement SEMICOLON
-//  | ifStatement
-//  | whileStatement
 //  | functionDefinitionStatement
 //  | classDefinitionStatement
 //  | returnStatement SEMICOLON
@@ -37,22 +37,20 @@ statement
 printStatement
   ::= PRINT expression
 
-//defStatement
-//  : DEF name=ID
-//  ( COLON type=ID (ASSIGN expression)?
-//  | ASSIGN expression
-//  );
-//
-//ifStatement
-//  : IF condition=expression
-//    THEN thenStatement=statement
-//    (ELSE elseStatement=statement)?
-//  ;
-//
-//whileStatement
-//  : WHILE expression THEN statement
-//  ;
-//
+defStatement
+  ::= DEF ID
+  ( COLON ID (ASSIGN expression)?
+  | ASSIGN expression
+  )
+
+ifStatement
+  ::= IF expression
+      THEN statement
+      (ELSE statement)?
+
+whileStatement
+  ::= WHILE expression THEN statement
+
 //classDefinitionStatement
 //  : CLASS name=ID OPEN_BRACE fieldDefinition* functionDefinitionStatement* CLOSE_BRACE
 //  ;

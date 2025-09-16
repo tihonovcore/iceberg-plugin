@@ -38,10 +38,10 @@ SLASH = "/"
 //OR  : 'or';
 
 PRINT  = print
-//WHILE  : 'while';
-//IF     : 'if';
-//THEN   : 'then';
-//ELSE   : 'else';
+WHILE  = while
+IF     = if
+THEN   = then
+ELSE   = else
 //FUN    : 'fun';
 //RETRUN : 'return';
 //CLASS  : 'class';
@@ -54,9 +54,9 @@ FALSE  = false
 TRUE   = true
 NULL   = null
 
-//DEF    : 'def';
-//COLON  : ':';
-//ASSIGN : '=';
+DEF    = def
+COLON  = :
+ASSIGN = =
 ID     = [A-Za-z_][A-Za-z_0-9]*
 DOT    = "."
 
@@ -85,6 +85,10 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {SLASH}                           { return IcebergTypes.SLASH; }
 
 <YYINITIAL> {PRINT}                           { return IcebergTypes.PRINT; }
+<YYINITIAL> {WHILE}                           { return IcebergTypes.WHILE; }
+<YYINITIAL> {IF}                              { return IcebergTypes.IF; }
+<YYINITIAL> {THEN}                            { return IcebergTypes.THEN; }
+<YYINITIAL> {ELSE}                            { return IcebergTypes.ELSE; }
 <YYINITIAL> {IMPORT}                          { return IcebergTypes.IMPORT; }
 
 <YYINITIAL> {NUMBER}                          { return IcebergTypes.NUMBER; }
@@ -92,6 +96,9 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {TRUE}                            { return IcebergTypes.TRUE; }
 <YYINITIAL> {NULL}                            { return IcebergTypes.NULL; }
 
+<YYINITIAL> {DEF}                             { return IcebergTypes.DEF; }
+<YYINITIAL> {COLON}                           { return IcebergTypes.COLON; }
+<YYINITIAL> {ASSIGN}                          { return IcebergTypes.ASSIGN; }
 <YYINITIAL> {ID}                              { return IcebergTypes.ID; }
 <YYINITIAL> {DOT}                             { return IcebergTypes.DOT; }
 
