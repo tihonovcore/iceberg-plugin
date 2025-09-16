@@ -57,7 +57,7 @@ NULL   = null
 //DEF    : 'def';
 //COLON  : ':';
 //ASSIGN : '=';
-//ID     : [A-Za-z_][A-Za-z_0-9]*;
+ID     = [A-Za-z_][A-Za-z_0-9]*
 //DOT    : '.';
 //
 //STRING
@@ -90,6 +90,8 @@ COMMENT = "//" [^\n\r]*
 <YYINITIAL> {FALSE}                           { return IcebergTypes.FALSE; }
 <YYINITIAL> {TRUE}                            { return IcebergTypes.TRUE; }
 <YYINITIAL> {NULL}                            { return IcebergTypes.NULL; }
+
+<YYINITIAL> {ID}                              { return IcebergTypes.ID; }
 
 <YYINITIAL> {SEMICOLON}                       { return IcebergTypes.SEMICOLON; }
 //<YYINITIAL> {COMMA}                           { return IcebergTypes.COMMA; }

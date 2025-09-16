@@ -36,7 +36,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NUMBER|FALSE|TRUE|NULL|COMMENT
+  // NUMBER|FALSE|TRUE|NULL|COMMENT|ID
   public static boolean atom(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "atom")) return false;
     boolean r;
@@ -46,6 +46,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, TRUE);
     if (!r) r = consumeToken(b, NULL);
     if (!r) r = consumeToken(b, COMMENT);
+    if (!r) r = consumeToken(b, ID);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

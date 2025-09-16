@@ -139,4 +139,4 @@ factor
 //  | atom                                                  #atomExpression
 //  ;
 
-atom ::= NUMBER|FALSE|TRUE|NULL|COMMENT
+atom ::= NUMBER|FALSE|TRUE|NULL|COMMENT|ID

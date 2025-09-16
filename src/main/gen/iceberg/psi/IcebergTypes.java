@@ -17,6 +17,7 @@ public interface IcebergTypes {
 
   IElementType COMMENT = new IcebergTokenType("COMMENT");
   IElementType FALSE = new IcebergTokenType("FALSE");
+  IElementType ID = new IcebergTokenType("ID");
   IElementType MINUS = new IcebergTokenType("MINUS");
   IElementType NULL = new IcebergTokenType("NULL");
   IElementType NUMBER = new IcebergTokenType("NUMBER");
