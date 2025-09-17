@@ -10,6 +10,11 @@ import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
 public class IcebergRunConfiguration extends RunConfigurationBase {
 
     protected IcebergRunConfiguration(Project project, ConfigurationFactory factory, String name) {
@@ -18,12 +23,23 @@ public class IcebergRunConfiguration extends RunConfigurationBase {
 
     @Override
     public @NotNull SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        return new IcebergSettingsEditor(); // UI для редактирования (путь к файлу, аргументы и т.п.)
+        return new IcebergSettingsEditor(getProject());
     }
 
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
-        // Проверки перед запуском
+        if (file == null) {
+            throw new RuntimeConfigurationError("File path is not set");
+        }
+
+        var path = Path.of(file);
+        if (!Files.exists(path)) {
+            throw new RuntimeConfigurationError("File not exists");
+        }
+
+        if (Files.isDirectory(path)) {
+            throw new RuntimeConfigurationError("Not a .ib file");
+        }
     }
 
     @Override
@@ -39,13 +55,21 @@ public class IcebergRunConfiguration extends RunConfigurationBase {
     }
 
     private String file = "~/IdeaProjects/ice/src/x.ib";
+    private List<String> classpath = new ArrayList<>();
 
     String getProgramFilePath() {
-        // Вернуть путь к файлу, который нужно запускать
         return file;
     }
 
     void setProgramFilePath(String path) {
         file = path;
+    }
+
+    public List<String> getClasspath() {
+        return classpath;
+    }
+
+    public void setClasspath(List<String> classpath) {
+        this.classpath = classpath;
     }
 }
