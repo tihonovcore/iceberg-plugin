@@ -48,5 +48,8 @@
         <lang.commenter
             language="Iceberg"
             implementationClass="iceberg.IcebergCommenter"/>
+        <externalAnnotator
+            language="Iceberg"
+            implementationClass="iceberg.IcebergSemanticAnnotator"/>
     </extensions>
 </idea-plugin>
