@@ -45,5 +45,8 @@
         <completion.contributor
             language="Iceberg"
             implementationClass="iceberg.IcebergCompletionContributor"/>
+        <lang.commenter
+            language="Iceberg"
+            implementationClass="iceberg.IcebergCommenter"/>
     </extensions>
 </idea-plugin>
