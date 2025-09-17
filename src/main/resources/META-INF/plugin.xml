@@ -42,5 +42,8 @@
         <runLineMarkerContributor
             language="Iceberg"
             implementationClass="iceberg.run.IcebergRunLineMarkerContributor"/>
+        <completion.contributor
+            language="Iceberg"
+            implementationClass="iceberg.IcebergCompletionContributor"/>
     </extensions>
 </idea-plugin>

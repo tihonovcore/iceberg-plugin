@@ -59,6 +59,9 @@ public class IcebergSyntaxHighlighter extends SyntaxHighlighterBase {
             return IDENTIFIER_KEYS;
         }
 
+        if (IcebergTypes.QUOTES.equals(tokenType)) {
+            return STRING_KEYS;
+        }
         if (IcebergTypes.CHAR.equals(tokenType)) {
             return STRING_KEYS;
         }
