@@ -22,7 +22,9 @@ public class IcebergSemanticAnnotator extends ExternalAnnotator<List<Info>, List
     public List<Info> collectInformation(@NotNull PsiFile file) {
         try {
             new Analyzer().analyze(file.getText());
-        } catch (SemanticException e) {
+        } catch (CompilationException e) {
+            //ignore, it's processed by PSI
+        }catch (SemanticException e) {
             if (0 <= e.start && e.start <= e.stop) {
                 var textRange = new TextRange(e.start, e.stop);
                 return List.of(new Info(textRange, e.getMessage()));
