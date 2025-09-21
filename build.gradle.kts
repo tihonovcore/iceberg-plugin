@@ -16,6 +16,7 @@ sourceSets {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 
     intellijPlatform {
         defaultRepositories()
@@ -27,6 +28,8 @@ dependencies {
         intellijIdeaCommunity(version = "2024.3.6")
         bundledPlugin(id = "com.intellij.java")
     }
+
+    implementation("com.tihonovcore:iceberg:0.1")
 }
 
 intellijPlatform {
@@ -35,6 +38,7 @@ intellijPlatform {
     pluginConfiguration {
         ideaVersion {
             sinceBuild = "243"
+            untilBuild = "252.*"
         }
     }
     pluginVerification  {

@@ -4,65 +4,48 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.ExternalAnnotator;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import iceberg.psi.IcebergFunctionDefinitionStatement;
-import iceberg.psi.IcebergVisitor;
+import iceberg.common.Analyzer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class IcebergSemanticAnnotator extends ExternalAnnotator<List<TextRange>, List<TextRange>> {
+import static iceberg.IcebergSemanticAnnotator.*;
+
+public class IcebergSemanticAnnotator extends ExternalAnnotator<List<Info>, List<Info>> {
+
+    public record Info(TextRange textRange, String message) {}
 
     @Override
-    public List<TextRange> collectInformation(@NotNull PsiFile file) {
-        //TODO: тут можно вызвать построение IR и поймать все ошибки
-        // но язык написан на Java 21, а IDEA запускается на Java 17
-        // => надо переходить в языке на 17ю версию
-
-        List<TextRange> badRanges = new ArrayList<>();
-        file.accept(new IcebergVisitor() {
-            boolean insideFunction = false;
-
-            @Override
-            public void visitFunctionDefinitionStatement(@NotNull IcebergFunctionDefinitionStatement o) {
-                if (insideFunction) {
-                    badRanges.add(o.getTextRange());
-                }
-
-                boolean prev = insideFunction;
-                try {
-                    insideFunction = true;
-                    super.visitFunctionDefinitionStatement(o);
-                } finally {
-                    insideFunction = prev;
-                }
+    public List<Info> collectInformation(@NotNull PsiFile file) {
+        try {
+            new Analyzer().analyze(file.getText());
+        } catch (SemanticException e) {
+            if (0 <= e.start && e.start <= e.stop) {
+                var textRange = new TextRange(e.start, e.stop);
+                return List.of(new Info(textRange, e.getMessage()));
             }
+        }
 
-            @Override
-            public void visitElement(@NotNull PsiElement element) {
-                element.acceptChildren(this);
-            }
-        });
-
-        return badRanges;
+        return Collections.emptyList();
     }
 
     @Override
-    public List<TextRange> doAnnotate(List<TextRange> collectedInfo) {
+    public @Nullable List<Info> doAnnotate(List<Info> collectedInfo) {
         return collectedInfo;
     }
 
     @Override
     public void apply(
         @NotNull PsiFile file,
-        List<TextRange> annotationResult,
+        List<Info> annotationResult,
         @NotNull AnnotationHolder holder
     ) {
-        for (var textRange : annotationResult) {
-            holder.newAnnotation(HighlightSeverity.ERROR, "function inside function")
-                .range(textRange)
+        for (var info : annotationResult) {
+            holder.newAnnotation(HighlightSeverity.ERROR, info.message)
+                .range(info.textRange)
                 .create();
         }
     }
