@@ -21,35 +21,36 @@ public class IcebergRunLineMarkerContributor extends RunLineMarkerContributor {
         PsiFile file = element.getContainingFile();
         if (!(file instanceof IcebergFile)) return null;
 
+        AnAction runAction = new AnAction() {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                Project project = element.getProject();
+                RunnerAndConfigurationSettings settings = RunManager.getInstance(project)
+                    .createConfiguration(
+                        file.getName(),
+                        new IcebergRunConfigurationType().getConfigurationFactories()[0]
+                    );
+
+                var configuration = (IcebergRunConfiguration) settings.getConfiguration();
+                configuration.setProgramFilePath(file.getVirtualFile().getPath());
+
+                settings.setName(file.getName());
+                RunManager.getInstance(project).addConfiguration(settings);
+                RunManager.getInstance(project).setSelectedConfiguration(settings);
+
+                ProgramRunnerUtil.executeConfiguration(
+                    settings,
+                    DefaultRunExecutor.getRunExecutorInstance()
+                );
+            }
+        };
+
         // Чтобы кнопка не дублировалась на каждой ноде,
         // вешаем её только на первый элемент PSI файла
         if (element.equals(file.getFirstChild())) {
-            return new Info(
+            return new RunLineMarkerContributor.Info(
                 AllIcons.Actions.Execute,            // иконка запуска
-                psiElement -> "Run Iceberg file " + file.getName(), // тултип
-                new AnAction() {
-                    @Override
-                    public void actionPerformed(@NotNull AnActionEvent e) {
-                        Project project = element.getProject();
-                        RunnerAndConfigurationSettings settings = RunManager.getInstance(project)
-                            .createConfiguration(
-                                file.getName(),
-                                new IcebergRunConfigurationType().getConfigurationFactories()[0]
-                            );
-
-                        var configuration = (IcebergRunConfiguration) settings.getConfiguration();
-                        configuration.setProgramFilePath(file.getVirtualFile().getPath());
-
-                        settings.setName(file.getName());
-                        RunManager.getInstance(project).addConfiguration(settings);
-                        RunManager.getInstance(project).setSelectedConfiguration(settings);
-
-                        ProgramRunnerUtil.executeConfiguration(
-                            settings,
-                            DefaultRunExecutor.getRunExecutorInstance()
-                        );
-                    }
-                }
+                new AnAction[] {runAction}
             );
         }
 

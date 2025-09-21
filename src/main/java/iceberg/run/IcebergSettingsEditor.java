@@ -1,12 +1,14 @@
 package iceberg.run;
 
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
+import iceberg.IcebergFileType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -29,10 +31,12 @@ public class IcebergSettingsEditor extends SettingsEditor<IcebergRunConfiguratio
         // --- file chooser ---
         fileField = new TextFieldWithBrowseButton();
         fileField.addBrowseFolderListener(
-            "Select Iceberg File",
-            "Select a source file to run",
-            project,
-            new FileChooserDescriptor(true, false, false, false, false, false)
+            new TextBrowseFolderListener(
+                FileChooserDescriptorFactory.createSingleFileDescriptor(
+                    IcebergFileType.INSTANCE
+                ),
+                project
+            )
         );
         fileField.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
