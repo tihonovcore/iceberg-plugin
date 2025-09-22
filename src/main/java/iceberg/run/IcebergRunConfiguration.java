@@ -3,8 +3,7 @@ package iceberg.run;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
-import com.intellij.execution.process.ColoredProcessHandler;
-import com.intellij.execution.process.ProcessHandler;
+import com.intellij.execution.process.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
@@ -12,13 +11,33 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
-public class IcebergRunConfiguration extends RunConfigurationBase {
+public class IcebergRunConfiguration extends RunConfigurationBase<IcebergRunConfigurationOptions> {
 
     protected IcebergRunConfiguration(Project project, ConfigurationFactory factory, String name) {
         super(project, factory, name);
+    }
+
+    @Override
+    protected @NotNull IcebergRunConfigurationOptions getOptions() {
+        return (IcebergRunConfigurationOptions) super.getOptions();
+    }
+
+    String getProgramFilePath() {
+        return getOptions().getSourceFile();
+    }
+
+    void setProgramFilePath(String path) {
+        getOptions().setSourceFile(path);
+    }
+
+    public Set<String> getClasspath() {
+        return getOptions().getClassPath();
+    }
+
+    public void setClasspath(Set<String> classpath) {
+        getOptions().setClassPath(classpath);
     }
 
     @Override
@@ -28,6 +47,7 @@ public class IcebergRunConfiguration extends RunConfigurationBase {
 
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
+        var file = getOptions().getSourceFile();
         if (file == null) {
             throw new RuntimeConfigurationError("File path is not set");
         }
@@ -48,28 +68,15 @@ public class IcebergRunConfiguration extends RunConfigurationBase {
             @NotNull
             @Override
             protected ProcessHandler startProcess() throws ExecutionException {
-                GeneralCommandLine cmd = new GeneralCommandLine("ice", "-run", getProgramFilePath());
-                return new ColoredProcessHandler(cmd);
+                if (getClasspath().isEmpty()) {
+                    GeneralCommandLine cmd = new GeneralCommandLine("ice", "-run", getProgramFilePath());
+                    return new ColoredProcessHandler(cmd);
+                } else {
+                    var cp = String.join(":", getClasspath());
+                    GeneralCommandLine cmd = new GeneralCommandLine("ice", "-cp", cp, "-run", getProgramFilePath());
+                    return new ColoredProcessHandler(cmd);
+                }
             }
         };
-    }
-
-    private String file = "~/IdeaProjects/ice/src/x.ib";
-    private List<String> classpath = new ArrayList<>();
-
-    String getProgramFilePath() {
-        return file;
-    }
-
-    void setProgramFilePath(String path) {
-        file = path;
-    }
-
-    public List<String> getClasspath() {
-        return classpath;
-    }
-
-    public void setClasspath(List<String> classpath) {
-        this.classpath = classpath;
     }
 }

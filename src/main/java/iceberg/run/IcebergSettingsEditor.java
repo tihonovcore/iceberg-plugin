@@ -3,19 +3,18 @@ package iceberg.run;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.ui.DocumentAdapter;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
+import com.intellij.util.ui.FormBuilder;
 import iceberg.IcebergFileType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class IcebergSettingsEditor extends SettingsEditor<IcebergRunConfiguration> {
 
@@ -26,61 +25,41 @@ public class IcebergSettingsEditor extends SettingsEditor<IcebergRunConfiguratio
     private final JPanel panel;
 
     public IcebergSettingsEditor(@NotNull Project project) {
-        panel = new JPanel(new BorderLayout());
-
         // --- file chooser ---
         fileField = new TextFieldWithBrowseButton();
         fileField.addBrowseFolderListener(
-            new TextBrowseFolderListener(
-                FileChooserDescriptorFactory.createSingleFileDescriptor(
-                    IcebergFileType.INSTANCE
-                ),
-                project
+            project,
+            FileChooserDescriptorFactory.createSingleFileDescriptor(
+                IcebergFileType.INSTANCE
             )
         );
-        fileField.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
-            @Override
-            protected void textChanged(@NotNull DocumentEvent e) {
-                fireEditorStateChanged();
-            }
-        });
 
-        // --- classpath list ---
+        // --- classpath chooser ---
         classpathModel = new DefaultListModel<>();
         classpathList = new JBList<>(classpathModel);
-        classpathList.setVisibleRowCount(5);
 
-        ToolbarDecorator decorator = ToolbarDecorator.createDecorator(classpathList)
+        JPanel classpathPanel = ToolbarDecorator.createDecorator(classpathList)
             .setAddAction(button -> {
-                String path = com.intellij.openapi.ui.Messages.showInputDialog(
-                    project,
-                    "Enter classpath directory:",
-                    "Add to Classpath",
-                    null
-                );
-                if (path != null && !path.isBlank()) {
-                    classpathModel.addElement(path.trim());
-                    fireEditorStateChanged();
+                var descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
+                descriptor.setTitle("Select Classpath Folder");
+                VirtualFile file = com.intellij.openapi.fileChooser.FileChooser.chooseFile(descriptor, project, null);
+                if (file != null) {
+                    classpathModel.addElement(file.getPath());
                 }
             })
             .setRemoveAction(button -> {
-                int index = classpathList.getSelectedIndex();
-                if (index >= 0) {
-                    classpathModel.remove(index);
-                    fireEditorStateChanged();
+                int idx = classpathList.getSelectedIndex();
+                if (idx >= 0) {
+                    classpathModel.remove(idx);
                 }
-            });
+            })
+            .disableUpDownActions()
+            .createPanel();
 
-        JPanel classpathPanel = decorator.createPanel();
-
-        // --- layout ---
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.add(new JLabel("File:"), BorderLayout.WEST);
-        topPanel.add(fileField, BorderLayout.CENTER);
-
-        panel.add(topPanel, BorderLayout.NORTH);
-        panel.add(new JLabel("Classpath:"), BorderLayout.CENTER);
-        panel.add(classpathPanel, BorderLayout.SOUTH);
+        panel = FormBuilder.createFormBuilder()
+            .addLabeledComponent("Script file", fileField)
+            .addLabeledComponent("Classpath", classpathPanel)
+            .getPanel();
     }
 
     @Override
@@ -99,7 +78,7 @@ public class IcebergSettingsEditor extends SettingsEditor<IcebergRunConfiguratio
     protected void applyEditorTo(@NotNull IcebergRunConfiguration config) {
         config.setProgramFilePath(fileField.getText());
 
-        List<String> newClasspath = new ArrayList<>();
+        Set<String> newClasspath = new HashSet<>();
         for (int i = 0; i < classpathModel.getSize(); i++) {
             newClasspath.add(classpathModel.get(i));
         }

@@ -3,6 +3,7 @@ package iceberg.run;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.openapi.components.BaseState;
 import com.intellij.openapi.project.Project;
 import iceberg.IcebergIcons;
 import org.jetbrains.annotations.NonNls;
@@ -24,6 +25,11 @@ public class IcebergRunConfigurationType implements ConfigurationType {
             @Override
             public @NotNull RunConfiguration createTemplateConfiguration(@NotNull Project project) {
                 return new IcebergRunConfiguration(project, this, "Iceberg Run");
+            }
+
+            @Override
+            public Class<? extends BaseState> getOptionsClass() {
+                return IcebergRunConfigurationOptions.class;
             }
         };
     }
