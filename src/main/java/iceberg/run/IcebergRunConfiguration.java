@@ -24,11 +24,11 @@ public class IcebergRunConfiguration extends RunConfigurationBase<IcebergRunConf
         return (IcebergRunConfigurationOptions) super.getOptions();
     }
 
-    String getProgramFilePath() {
+    public String getProgramFilePath() {
         return getOptions().getSourceFile();
     }
 
-    void setProgramFilePath(String path) {
+    public void setProgramFilePath(String path) {
         getOptions().setSourceFile(path);
     }
 

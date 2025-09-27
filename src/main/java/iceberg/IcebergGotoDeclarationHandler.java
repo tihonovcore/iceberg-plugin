@@ -1,15 +1,20 @@
 package iceberg;
 
 import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandler;
+import com.intellij.execution.RunManager;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import iceberg.psi.*;
+import iceberg.run.IcebergRunConfiguration;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 //NOTE: правильнее реализовывать простые прыжки через PsiReference,
@@ -48,17 +53,7 @@ public class IcebergGotoDeclarationHandler implements GotoDeclarationHandler {
             for (var imported : importedClasses) {
                 var actual = imported.getDepIdentifierList().getLast().getText();
                 if (actual.equals(className)) {
-                    var fqn = imported.getDepIdentifierList().stream()
-                        .map(PsiElement::getText)
-                        .collect(Collectors.joining("."));
-
-                    var facade = JavaPsiFacade.getInstance(sourceElement.getProject());
-                    var psiClass = facade.findClass(fqn, GlobalSearchScope.allScope(sourceElement.getProject()));
-                    if (psiClass != null) {
-                        return new PsiElement[]{psiClass};
-                    }
-
-                    //TODO: open file from classpath
+                    return jumpFromImport(imported);
                 }
             }
 
@@ -76,9 +71,53 @@ public class IcebergGotoDeclarationHandler implements GotoDeclarationHandler {
                 .toArray(PsiElement[]::new);
         }
 
+        if (element instanceof IcebergDepIdentifier) {
+            var imported = (IcebergDependency) element.getParent();
+            return jumpFromImport(imported);
+        }
+
         //NOTE: для переменных нужен анализ скоупов
         //NOTE: для функций нужен анализ типов аргументов
 
         return PsiElement.EMPTY_ARRAY;
+    }
+
+    private PsiElement @Nullable [] jumpFromImport(IcebergDependency imported) {
+        var fqn = imported.getDepIdentifierList().stream()
+            .map(PsiElement::getText)
+            .collect(Collectors.joining("."));
+
+        var facade = JavaPsiFacade.getInstance(imported.getProject());
+        var psiClass = facade.findClass(fqn, GlobalSearchScope.allScope(imported.getProject()));
+        if (psiClass != null) {
+            return new PsiElement[]{psiClass};
+        }
+
+        var runManager = RunManager.getInstance(imported.getProject());
+        var classPaths = runManager.getAllConfigurationsList().stream()
+            .filter(IcebergRunConfiguration.class::isInstance)
+            .map(IcebergRunConfiguration.class::cast)
+            .filter(cfg -> {
+                var expected = imported.getContainingFile().getVirtualFile().getPath();
+                return expected.equals(cfg.getProgramFilePath());
+            })
+            .map(IcebergRunConfiguration::getClasspath)
+            .flatMap(Collection::stream)
+            .distinct()
+            .toList();
+
+        //TODO: support jars
+        var suffix = imported.getDepIdentifierList().stream()
+            .map(PsiElement::getText)
+            .collect(Collectors.joining(File.separator)) + ".class";
+
+        var localFileSystem = LocalFileSystem.getInstance();
+        var psiManager = PsiManager.getInstance(imported.getProject());
+        return classPaths.stream()
+            .map((String prefix) -> Path.of(prefix, suffix).toAbsolutePath().toString())
+            .map(localFileSystem::findFileByPath)
+            .filter(Objects::nonNull)
+            .map(psiManager::findFile)
+            .toArray(PsiElement[]::new);
     }
 }
