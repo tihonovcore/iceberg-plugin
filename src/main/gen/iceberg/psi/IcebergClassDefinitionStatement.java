@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface IcebergClassDefinitionStatement extends PsiElement {
 
   @NotNull
+  IcebergClassIdentifier getClassIdentifier();
+
+  @NotNull
   List<IcebergFieldDefinition> getFieldDefinitionList();
 
   @NotNull

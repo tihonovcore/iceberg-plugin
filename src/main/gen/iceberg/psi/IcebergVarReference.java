@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface IcebergDependency extends PsiElement {
-
-  @NotNull
-  List<IcebergDepIdentifier> getDepIdentifierList();
+public interface IcebergVarReference extends PsiElement {
 
 }

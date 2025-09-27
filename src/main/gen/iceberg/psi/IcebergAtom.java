@@ -13,4 +13,7 @@ public interface IcebergAtom extends PsiElement {
   @Nullable
   IcebergFunctionCall getFunctionCall();
 
+  @Nullable
+  IcebergVarReference getVarReference();
+
 }

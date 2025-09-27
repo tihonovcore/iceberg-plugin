@@ -11,6 +11,9 @@ public interface IcebergUnaryExpression extends PsiElement {
   IcebergAtom getAtom();
 
   @Nullable
+  IcebergClassReference getClassReference();
+
+  @Nullable
   IcebergUnaryExpression getUnaryExpression();
 
 }

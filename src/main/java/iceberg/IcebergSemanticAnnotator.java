@@ -20,6 +20,7 @@ public class IcebergSemanticAnnotator extends ExternalAnnotator<List<Info>, List
 
     @Override
     public List<Info> collectInformation(@NotNull PsiFile file) {
+        //TODO: highligt bad string elems
         try {
             new Analyzer().analyze(file.getText());
         } catch (CompilationException e) {

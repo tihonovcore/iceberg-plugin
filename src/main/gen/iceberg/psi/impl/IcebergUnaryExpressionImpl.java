@@ -35,6 +35,12 @@ public class IcebergUnaryExpressionImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @Nullable
+  public IcebergClassReference getClassReference() {
+    return findChildByClass(IcebergClassReference.class);
+  }
+
+  @Override
+  @Nullable
   public IcebergUnaryExpression getUnaryExpression() {
     return findChildByClass(IcebergUnaryExpression.class);
   }

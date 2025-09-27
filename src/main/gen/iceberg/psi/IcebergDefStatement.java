@@ -8,6 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface IcebergDefStatement extends PsiElement {
 
   @Nullable
+  IcebergClassReference getClassReference();
+
+  @Nullable
   IcebergExpression getExpression();
+
+  @NotNull
+  IcebergVarIdentifier getVarIdentifier();
 
 }

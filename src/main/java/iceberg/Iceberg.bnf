@@ -17,7 +17,7 @@ file
   ::= dependency* statement*
 
 dependency
-  ::= IMPORT ID (DOT ID)* SEMICOLON
+  ::= IMPORT depIdentifier (DOT depIdentifier)* SEMICOLON
 
 statement
   ::= expression      SEMICOLON
@@ -35,8 +35,8 @@ printStatement
   ::= PRINT expression
 
 defStatement
-  ::= DEF ID
-  ( COLON ID (ASSIGN expression)?
+  ::= DEF varIdentifier
+  ( COLON classReference (ASSIGN expression)?
   | ASSIGN expression
   )
 
@@ -51,7 +51,7 @@ whileStatement
   ::= WHILE expression THEN statement
 
 classDefinitionStatement
-  ::= CLASS ID OPEN_BRACE fieldDefinition* functionDefinitionStatement* CLOSE_BRACE
+  ::= CLASS classIdentifier OPEN_BRACE fieldDefinition* functionDefinitionStatement* CLOSE_BRACE
 
 fieldDefinition
   ::= DEF ID COLON ID (ASSIGN expression)?
@@ -60,7 +60,7 @@ functionDefinitionStatement
   ::= FUN ID OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS (COLON ID)? block
 
 parameters ::= ((parameter COMMA)* parameter)?
-parameter  ::= ID COLON ID;
+parameter  ::= ID COLON classReference;
 
 functionCall ::= ID OPEN_PARENTHESIS arguments CLOSE_PARENTHESIS
 arguments    ::= ((expression COMMA)* expression)?
@@ -77,10 +77,16 @@ multiplicativeExpression ::= memberAccessExpression   ((STAR | SLASH) memberAcce
 memberAccessExpression   ::= unaryExpression          (DOT ID (OPEN_PARENTHESIS arguments CLOSE_PARENTHESIS)?)*
 
 unaryExpression
-  ::= (NEW ID)
+  ::= (NEW classReference)
     | (NOT unaryExpression)
     | (MINUS unaryExpression)
     | atom
+
+varIdentifier   ::= ID
+varReference    ::= ID
+classIdentifier ::= ID
+classReference  ::= ID
+depIdentifier   ::= ID
 
 atom
   ::= OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
@@ -90,5 +96,5 @@ atom
     | TRUE
     | QUOTES (CHAR|VALID_ESCAPE|INVALID_ESCAPE)* QUOTES
     | NULL
-    | ID
+    | varReference
     | THIS

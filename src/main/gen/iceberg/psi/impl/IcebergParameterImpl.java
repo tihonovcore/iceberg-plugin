@@ -27,4 +27,10 @@ public class IcebergParameterImpl extends ASTWrapperPsiElement implements Iceber
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public IcebergClassReference getClassReference() {
+    return findNotNullChildByClass(IcebergClassReference.class);
+  }
+
 }

@@ -129,7 +129,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   //     | TRUE
   //     | QUOTES (CHAR|VALID_ESCAPE|INVALID_ESCAPE)* QUOTES
   //     | NULL
-  //     | ID
+  //     | varReference
   //     | THIS
   public static boolean atom(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "atom")) return false;
@@ -142,7 +142,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, TRUE);
     if (!r) r = atom_5(b, l + 1);
     if (!r) r = consumeToken(b, NULL);
-    if (!r) r = consumeToken(b, ID);
+    if (!r) r = varReference(b, l + 1);
     if (!r) r = consumeToken(b, THIS);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -219,13 +219,15 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CLASS ID OPEN_BRACE fieldDefinition* functionDefinitionStatement* CLOSE_BRACE
+  // CLASS classIdentifier OPEN_BRACE fieldDefinition* functionDefinitionStatement* CLOSE_BRACE
   public static boolean classDefinitionStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "classDefinitionStatement")) return false;
     if (!nextTokenIs(b, CLASS)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, CLASS, ID, OPEN_BRACE);
+    r = consumeToken(b, CLASS);
+    r = r && classIdentifier(b, l + 1);
+    r = r && consumeToken(b, OPEN_BRACE);
     r = r && classDefinitionStatement_3(b, l + 1);
     r = r && classDefinitionStatement_4(b, l + 1);
     r = r && consumeToken(b, CLOSE_BRACE);
@@ -256,8 +258,32 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // DEF ID
-  //   ( COLON ID (ASSIGN expression)?
+  // ID
+  public static boolean classIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "classIdentifier")) return false;
+    if (!nextTokenIs(b, ID)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ID);
+    exit_section_(b, m, CLASS_IDENTIFIER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ID
+  public static boolean classReference(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "classReference")) return false;
+    if (!nextTokenIs(b, ID)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ID);
+    exit_section_(b, m, CLASS_REFERENCE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // DEF varIdentifier
+  //   ( COLON classReference (ASSIGN expression)?
   //   | ASSIGN expression
   //   )
   public static boolean defStatement(PsiBuilder b, int l) {
@@ -265,13 +291,14 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     if (!nextTokenIs(b, DEF)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, DEF, ID);
+    r = consumeToken(b, DEF);
+    r = r && varIdentifier(b, l + 1);
     r = r && defStatement_2(b, l + 1);
     exit_section_(b, m, DEF_STATEMENT, r);
     return r;
   }
 
-  // COLON ID (ASSIGN expression)?
+  // COLON classReference (ASSIGN expression)?
   //   | ASSIGN expression
   private static boolean defStatement_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "defStatement_2")) return false;
@@ -283,12 +310,13 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // COLON ID (ASSIGN expression)?
+  // COLON classReference (ASSIGN expression)?
   private static boolean defStatement_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "defStatement_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, COLON, ID);
+    r = consumeToken(b, COLON);
+    r = r && classReference(b, l + 1);
     r = r && defStatement_2_0_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -324,20 +352,33 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IMPORT ID (DOT ID)* SEMICOLON
+  // ID
+  public static boolean depIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "depIdentifier")) return false;
+    if (!nextTokenIs(b, ID)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ID);
+    exit_section_(b, m, DEP_IDENTIFIER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // IMPORT depIdentifier (DOT depIdentifier)* SEMICOLON
   public static boolean dependency(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "dependency")) return false;
     if (!nextTokenIs(b, IMPORT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, IMPORT, ID);
+    r = consumeToken(b, IMPORT);
+    r = r && depIdentifier(b, l + 1);
     r = r && dependency_2(b, l + 1);
     r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, m, DEPENDENCY, r);
     return r;
   }
 
-  // (DOT ID)*
+  // (DOT depIdentifier)*
   private static boolean dependency_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "dependency_2")) return false;
     while (true) {
@@ -348,12 +389,13 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // DOT ID
+  // DOT depIdentifier
   private static boolean dependency_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "dependency_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, DOT, ID);
+    r = consumeToken(b, DOT);
+    r = r && depIdentifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -744,13 +786,14 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ID COLON ID
+  // ID COLON classReference
   public static boolean parameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "parameter")) return false;
     if (!nextTokenIs(b, ID)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, ID, COLON, ID);
+    r = consumeTokens(b, 0, ID, COLON);
+    r = r && classReference(b, l + 1);
     exit_section_(b, m, PARAMETER, r);
     return r;
   }
@@ -950,7 +993,7 @@ public class IcebergParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (NEW ID)
+  // (NEW classReference)
   //     | (NOT unaryExpression)
   //     | (MINUS unaryExpression)
   //     | atom
@@ -966,12 +1009,13 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // NEW ID
+  // NEW classReference
   private static boolean unaryExpression_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "unaryExpression_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, NEW, ID);
+    r = consumeToken(b, NEW);
+    r = r && classReference(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -995,6 +1039,30 @@ public class IcebergParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, MINUS);
     r = r && unaryExpression(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ID
+  public static boolean varIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "varIdentifier")) return false;
+    if (!nextTokenIs(b, ID)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ID);
+    exit_section_(b, m, VAR_IDENTIFIER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ID
+  public static boolean varReference(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "varReference")) return false;
+    if (!nextTokenIs(b, ID)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ID);
+    exit_section_(b, m, VAR_REFERENCE, r);
     return r;
   }
 

@@ -27,7 +27,19 @@ public class IcebergVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitClassIdentifier(@NotNull IcebergClassIdentifier o) {
+    visitPsiElement(o);
+  }
+
+  public void visitClassReference(@NotNull IcebergClassReference o) {
+    visitPsiElement(o);
+  }
+
   public void visitDefStatement(@NotNull IcebergDefStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDepIdentifier(@NotNull IcebergDepIdentifier o) {
     visitPsiElement(o);
   }
 
@@ -100,6 +112,14 @@ public class IcebergVisitor extends PsiElementVisitor {
   }
 
   public void visitUnaryExpression(@NotNull IcebergUnaryExpression o) {
+    visitPsiElement(o);
+  }
+
+  public void visitVarIdentifier(@NotNull IcebergVarIdentifier o) {
+    visitPsiElement(o);
+  }
+
+  public void visitVarReference(@NotNull IcebergVarReference o) {
     visitPsiElement(o);
   }
 

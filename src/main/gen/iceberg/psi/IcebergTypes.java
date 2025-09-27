@@ -13,8 +13,11 @@ public interface IcebergTypes {
   IElementType ATOM = new IcebergElementType("ATOM");
   IElementType BLOCK = new IcebergElementType("BLOCK");
   IElementType CLASS_DEFINITION_STATEMENT = new IcebergElementType("CLASS_DEFINITION_STATEMENT");
+  IElementType CLASS_IDENTIFIER = new IcebergElementType("CLASS_IDENTIFIER");
+  IElementType CLASS_REFERENCE = new IcebergElementType("CLASS_REFERENCE");
   IElementType DEF_STATEMENT = new IcebergElementType("DEF_STATEMENT");
   IElementType DEPENDENCY = new IcebergElementType("DEPENDENCY");
+  IElementType DEP_IDENTIFIER = new IcebergElementType("DEP_IDENTIFIER");
   IElementType EQUALITY_EXPRESSION = new IcebergElementType("EQUALITY_EXPRESSION");
   IElementType EXPRESSION = new IcebergElementType("EXPRESSION");
   IElementType FIELD_DEFINITION = new IcebergElementType("FIELD_DEFINITION");
@@ -32,6 +35,8 @@ public interface IcebergTypes {
   IElementType RETURN_STATEMENT = new IcebergElementType("RETURN_STATEMENT");
   IElementType STATEMENT = new IcebergElementType("STATEMENT");
   IElementType UNARY_EXPRESSION = new IcebergElementType("UNARY_EXPRESSION");
+  IElementType VAR_IDENTIFIER = new IcebergElementType("VAR_IDENTIFIER");
+  IElementType VAR_REFERENCE = new IcebergElementType("VAR_REFERENCE");
   IElementType WHILE_STATEMENT = new IcebergElementType("WHILE_STATEMENT");
 
   IElementType AND = new IcebergTokenType("AND");
@@ -97,11 +102,20 @@ public interface IcebergTypes {
       else if (type == CLASS_DEFINITION_STATEMENT) {
         return new IcebergClassDefinitionStatementImpl(node);
       }
+      else if (type == CLASS_IDENTIFIER) {
+        return new IcebergClassIdentifierImpl(node);
+      }
+      else if (type == CLASS_REFERENCE) {
+        return new IcebergClassReferenceImpl(node);
+      }
       else if (type == DEF_STATEMENT) {
         return new IcebergDefStatementImpl(node);
       }
       else if (type == DEPENDENCY) {
         return new IcebergDependencyImpl(node);
+      }
+      else if (type == DEP_IDENTIFIER) {
+        return new IcebergDepIdentifierImpl(node);
       }
       else if (type == EQUALITY_EXPRESSION) {
         return new IcebergEqualityExpressionImpl(node);
@@ -153,6 +167,12 @@ public interface IcebergTypes {
       }
       else if (type == UNARY_EXPRESSION) {
         return new IcebergUnaryExpressionImpl(node);
+      }
+      else if (type == VAR_IDENTIFIER) {
+        return new IcebergVarIdentifierImpl(node);
+      }
+      else if (type == VAR_REFERENCE) {
+        return new IcebergVarReferenceImpl(node);
       }
       else if (type == WHILE_STATEMENT) {
         return new IcebergWhileStatementImpl(node);

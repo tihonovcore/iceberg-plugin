@@ -29,8 +29,20 @@ public class IcebergDefStatementImpl extends ASTWrapperPsiElement implements Ice
 
   @Override
   @Nullable
+  public IcebergClassReference getClassReference() {
+    return findChildByClass(IcebergClassReference.class);
+  }
+
+  @Override
+  @Nullable
   public IcebergExpression getExpression() {
     return findChildByClass(IcebergExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public IcebergVarIdentifier getVarIdentifier() {
+    return findNotNullChildByClass(IcebergVarIdentifier.class);
   }
 
 }

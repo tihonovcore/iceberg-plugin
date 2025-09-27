@@ -29,6 +29,12 @@ public class IcebergClassDefinitionStatementImpl extends ASTWrapperPsiElement im
 
   @Override
   @NotNull
+  public IcebergClassIdentifier getClassIdentifier() {
+    return findNotNullChildByClass(IcebergClassIdentifier.class);
+  }
+
+  @Override
+  @NotNull
   public List<IcebergFieldDefinition> getFieldDefinitionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, IcebergFieldDefinition.class);
   }

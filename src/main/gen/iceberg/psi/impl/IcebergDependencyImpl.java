@@ -27,4 +27,10 @@ public class IcebergDependencyImpl extends ASTWrapperPsiElement implements Icebe
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public List<IcebergDepIdentifier> getDepIdentifierList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, IcebergDepIdentifier.class);
+  }
+
 }
